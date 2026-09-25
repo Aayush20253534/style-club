@@ -5,8 +5,8 @@ import ShopProvider from "@/components/layout/ShopProvider";
 import MotionProvider from "@/components/layout/MotionProvider";
 import Header from "@/components/layout/Header";
 import { BagDrawer, SearchOverlay } from "@/components/layout/Overlays";
-import { contact, stores } from "@/lib/data";
 import { getSiteUrl } from "@/lib/site";
+import { buildSiteJsonLd, serializeJsonLd } from "@/lib/structured-data";
 import "./globals.css";
 
 const anton = Anton({ subsets: ["latin"], weight: "400", variable: "--font-anton", display: "swap" });
@@ -77,30 +77,7 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
-const jsonLd = {
-  "@context": "https://schema.org",
-  "@type": "ClothingStore",
-  name: "Style Club",
-  url: SITE_URL,
-  image: `${SITE_URL}/brand/storefront.jpg`,
-  telephone: contact.phones[0].href.replace("tel:", ""),
-  sameAs: [contact.instagram.url],
-  address: {
-    "@type": "PostalAddress",
-    streetAddress: "Netram Chauraha, Old Katra",
-    addressLocality: "Prayagraj",
-    addressRegion: "Uttar Pradesh",
-    postalCode: "211002",
-    addressCountry: "IN",
-  },
-  department: stores
-    .filter((s) => !s.flagship)
-    .map((s) => ({
-      "@type": "ClothingStore",
-      name: `Style Club ${s.name}`,
-      address: { "@type": "PostalAddress", streetAddress: s.address, addressCountry: "IN" },
-    })),
-};
+const jsonLd = buildSiteJsonLd(SITE_URL);
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
@@ -125,7 +102,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         />
       </head>
       <body className="grain">
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(jsonLd) }} />
         <MotionProvider>
         <ShopProvider>
           <SmoothScroll />
