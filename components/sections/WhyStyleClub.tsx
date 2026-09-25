@@ -30,7 +30,11 @@ export default function WhyStyleClub() {
   const marqueeRef = useRef<HTMLDivElement>(null);
   const marqueeVisible = useInView(marqueeRef);
   return (
-    <section id="why" aria-labelledby="why-title" className="on-dark relative overflow-hidden bg-royal pt-24 text-white md:pt-32">
+    <section
+      id="why"
+      aria-labelledby="why-title"
+      className="on-dark relative scroll-mt-20 overflow-hidden bg-royal pt-24 text-white md:scroll-mt-24 md:pt-32"
+    >
       <div className="container-x">
         <Reveal>
           <p className="eyebrow text-white/65">05 — Why Style Club</p>

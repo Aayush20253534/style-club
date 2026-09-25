@@ -21,7 +21,7 @@ export default function ShopTheLook() {
     );
 
   return (
-    <section id="the-look" aria-labelledby="look-title" className="py-24 md:py-36">
+    <section id="the-look" aria-labelledby="look-title" className="scroll-mt-20 py-24 md:scroll-mt-24 md:py-36">
       <div className="container-x grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-16">
         <div className="min-w-0 lg:col-span-6 xl:col-span-5">
           <motion.div

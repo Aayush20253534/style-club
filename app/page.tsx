@@ -10,7 +10,7 @@ import Footer from "@/components/layout/Footer";
 export default function Home() {
   return (
     <>
-      <main id="main">
+      <main id="main" tabIndex={-1}>
         <div id="top" aria-hidden />
         <ThreadSequence />
         {/* Slides over the held final frame of the film (see the curtain in ThreadSequence). */}

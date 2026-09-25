@@ -50,7 +50,11 @@ export default function Trending() {
   };
 
   return (
-    <section id="trending" aria-labelledby="trending-title" className="overflow-hidden bg-bone py-24 md:py-32">
+    <section
+      id="trending"
+      aria-labelledby="trending-title"
+      className="scroll-mt-20 overflow-hidden bg-bone py-24 md:scroll-mt-24 md:py-32"
+    >
       <div className="container-x">
         <div className="flex items-end justify-between gap-6">
           <div>

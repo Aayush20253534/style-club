@@ -12,7 +12,11 @@ import { useParallax } from "@/components/ui/useParallax";
 
 export default function Departments() {
   return (
-    <section id="departments" aria-labelledby="departments-title" className="bg-night pb-24 pt-24 text-paper md:pb-32 md:pt-32">
+    <section
+      id="departments"
+      aria-labelledby="departments-title"
+      className="scroll-mt-20 bg-night pb-24 pt-24 text-paper md:scroll-mt-24 md:pb-32 md:pt-32"
+    >
       <div className="container-x">
         <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
           <div>
@@ -77,7 +81,7 @@ function Panel({ dept, index }: { dept: (typeof departments)[number]; index: num
       <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 p-6 md:p-7">
         <div>
           <p className="eyebrow text-[10px] text-white/70">{dept.kicker}</p>
-          <p className="display mt-3 text-[18vw] leading-[0.85] text-white md:text-[clamp(3.5rem,5.4vw,6rem)]">{dept.title}</p>
+          <h3 className="display mt-3 text-[18vw] leading-[0.85] text-white md:text-[clamp(3.5rem,5.4vw,6rem)]">{dept.title}</h3>
         </div>
         <span className="mb-2 inline-flex size-12 shrink-0 items-center justify-center border border-white/40 text-white transition-colors duration-300 group-hover:border-white group-hover:bg-white group-hover:text-char">
           <ArrowUpRight className="size-5" aria-hidden />

@@ -101,13 +101,16 @@ export default function Header() {
             <ul className="flex items-center gap-9">
               {NAV.map((item) => (
                 <li key={item.label}>
-                  <button
-                    type="button"
-                    onClick={() => go(item)}
+                  <a
+                    href={item.target}
+                    onClick={(event) => {
+                      event.preventDefault();
+                      go(item);
+                    }}
                     className="link-draw pb-1 text-[12px] font-semibold uppercase tracking-[0.2em]"
                   >
                     {item.label}
-                  </button>
+                  </a>
                 </li>
               ))}
             </ul>
@@ -169,14 +172,17 @@ export default function Header() {
                     transition={{ delay: reduce ? 0 : 0.05 + i * 0.04, duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
                     className="border-b border-line"
                   >
-                    <button
-                      type="button"
-                      onClick={() => go(item)}
+                    <a
+                      href={item.target}
+                      onClick={(event) => {
+                        event.preventDefault();
+                        go(item);
+                      }}
                       className="display flex w-full items-baseline justify-between py-4 text-left text-[44px]"
                     >
                       {item.label}
                       <span className="font-sans text-xs font-semibold tracking-[0.2em] text-mute">0{i + 1}</span>
-                    </button>
+                    </a>
                   </motion.li>
                 ))}
               </ul>

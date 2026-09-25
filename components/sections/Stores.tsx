@@ -18,7 +18,7 @@ export default function Stores() {
   useParallax(insetRef, photoRef, 14, -14);
 
   return (
-    <section id="stores" aria-labelledby="stores-title" className="py-24 md:py-36">
+    <section id="stores" aria-labelledby="stores-title" className="scroll-mt-20 py-24 md:scroll-mt-24 md:py-36">
       <div className="container-x">
         <div className="grid grid-cols-1 gap-14 lg:grid-cols-12 lg:gap-16">
           <div className="min-w-0 self-start lg:col-span-7">
@@ -82,13 +82,13 @@ export default function Stores() {
                       className="group grid grid-cols-[1fr_auto] items-start gap-4 border-b border-line py-5"
                     >
                       <div>
-                        <p className="flex items-center gap-3">
+                        <h3 className="flex items-center gap-3">
                           <span className="display text-[28px] leading-none">{s.name}</span>
                           {s.flagship && (
                             <span className="eyebrow bg-royal px-2 py-1 text-[9px] tracking-[0.22em] text-white">Flagship</span>
                           )}
-                        </p>
-                        <p className="mt-2 text-[14px] text-mute">{s.address}</p>
+                        </h3>
+                        <address className="mt-2 text-[14px] not-italic text-mute">{s.address}</address>
                         {s.hours && (
                           <p className="mt-1.5 flex items-center gap-1.5 text-[13px] text-char">
                             <Clock className="size-3.5" aria-hidden /> {s.hours}

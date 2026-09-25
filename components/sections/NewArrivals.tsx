@@ -14,7 +14,11 @@ export default function NewArrivals() {
   const items = filter === "all" ? newArrivals.slice(0, 8) : newArrivals.filter((p) => p.category === filter);
 
   return (
-    <section id="new-arrivals" aria-labelledby="new-arrivals-title" className="pb-24 pt-24 md:pb-36 md:pt-36">
+    <section
+      id="new-arrivals"
+      aria-labelledby="new-arrivals-title"
+      className="scroll-mt-20 pb-24 pt-24 md:scroll-mt-24 md:pb-36 md:pt-36"
+    >
       <div className="container-x">
         <div className="grid grid-cols-1 gap-10 md:grid-cols-12 md:items-end">
           <div className="min-w-0 md:col-span-7">
