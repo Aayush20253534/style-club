@@ -49,7 +49,17 @@ export default function Footer() {
         </p>
 
         <div className="flex flex-col gap-2 py-8 text-[12px] text-paper/45 sm:flex-row sm:justify-between">
-          <p>© {new Date().getFullYear()} Style Club, Prayagraj. All rights reserved.</p>
+          <p>
+            © {new Date().getFullYear()} Style Club, Prayagraj. All rights reserved. · Website by{" "}
+            <a
+              href="https://brandspaces.in"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="link-draw hover:text-paper"
+            >
+              BrandSpace
+            </a>
+          </p>
           <nav aria-label="Explore Style Club" className="flex flex-wrap gap-x-3 gap-y-1">
             <a href="#new-arrivals" className="link-draw hover:text-paper">New arrivals</a>
             <a href="#departments" className="link-draw hover:text-paper">Men · Women · Kids</a>
