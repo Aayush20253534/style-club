@@ -12,16 +12,17 @@ import {
 } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Check } from "lucide-react";
-import type { Category } from "@/lib/data";
+import { allProducts, look, type Category } from "@/lib/data";
 
 type BagLine = { id: string; name: string; price: number; image: string; qty: number };
+type TrustedBagItem = Omit<BagLine, "qty">;
 
 type ShopState = {
   bag: BagLine[];
   bagCount: number;
   wishlist: string[];
-  addToBag: (item: Omit<BagLine, "qty">) => void;
-  addManyToBag: (items: Omit<BagLine, "qty">[], label: string) => void;
+  addToBag: (item: TrustedBagItem) => void;
+  addManyToBag: (items: TrustedBagItem[], label: string) => void;
   removeFromBag: (id: string) => void;
   toggleWish: (id: string) => void;
   isWished: (id: string) => boolean;
@@ -36,7 +37,70 @@ type ShopState = {
 
 const ShopContext = createContext<ShopState | null>(null);
 
-const STORAGE_KEY = "styleclub:v1";
+const STORAGE_KEY = "styleclub:v2";
+const LEGACY_STORAGE_KEY = "styleclub:v1";
+const MAX_BAG_LINES = 50;
+const MAX_ITEM_QTY = 20;
+const MAX_WISHLIST = 100;
+
+const trustedCatalog = new Map<string, TrustedBagItem>();
+
+for (const item of [...allProducts, ...look.items]) {
+  if (!trustedCatalog.has(item.id)) {
+    trustedCatalog.set(item.id, {
+      id: item.id,
+      name: item.name,
+      price: item.price,
+      image: item.image,
+    });
+  }
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+function trustedItem(id: unknown) {
+  return typeof id === "string" ? trustedCatalog.get(id) : undefined;
+}
+
+function safeQty(value: unknown) {
+  if (typeof value !== "number" || !Number.isFinite(value)) return 1;
+  return Math.min(MAX_ITEM_QTY, Math.max(1, Math.trunc(value)));
+}
+
+function restoreBag(value: unknown): BagLine[] {
+  if (!Array.isArray(value)) return [];
+
+  const restored = new Map<string, BagLine>();
+
+  for (const entry of value.slice(0, MAX_BAG_LINES)) {
+    if (!isRecord(entry)) continue;
+    const item = trustedItem(entry.id);
+    if (!item) continue;
+
+    const qty = safeQty(entry.qty);
+    const existing = restored.get(item.id);
+    restored.set(item.id, {
+      ...item,
+      qty: Math.min(MAX_ITEM_QTY, (existing?.qty ?? 0) + qty),
+    });
+  }
+
+  return [...restored.values()].slice(0, MAX_BAG_LINES);
+}
+
+function restoreWishlist(value: unknown) {
+  if (!Array.isArray(value)) return [];
+
+  const seen = new Set<string>();
+  for (const id of value) {
+    if (typeof id !== "string" || !trustedCatalog.has(id)) continue;
+    seen.add(id);
+    if (seen.size >= MAX_WISHLIST) break;
+  }
+  return [...seen];
+}
 
 export function useShop() {
   const ctx = useContext(ShopContext);
@@ -51,32 +115,44 @@ export default function ShopProvider({ children }: { children: ReactNode }) {
   const [searchOpen, setSearchOpen] = useState(false);
   const [filter, setFilter] = useState<Category | "all">("all");
   const [toast, setToast] = useState<{ key: number; text: string } | null>(null);
-  const hydrated = useRef(false);
+  const [storageReady, setStorageReady] = useState(false);
   const toastTimer = useRef<number | undefined>(undefined);
 
-  // Restore after mount so server and client markup match.
+  // Restore after mount so server and client markup match. Only IDs and
+  // quantities survive storage; names, prices and images come from our catalog.
   useEffect(() => {
     try {
-      const raw = localStorage.getItem(STORAGE_KEY);
+      const raw = localStorage.getItem(STORAGE_KEY) ?? localStorage.getItem(LEGACY_STORAGE_KEY);
       if (raw) {
-        const saved = JSON.parse(raw) as { bag?: BagLine[]; wishlist?: string[] };
-        if (Array.isArray(saved.bag)) setBag(saved.bag);
-        if (Array.isArray(saved.wishlist)) setWishlist(saved.wishlist);
+        const saved: unknown = JSON.parse(raw);
+        if (isRecord(saved)) {
+          setBag(restoreBag(saved.bag));
+          setWishlist(restoreWishlist(saved.wishlist));
+        }
       }
     } catch {
-      /* storage unavailable — keep in-memory state */
+      /* storage unavailable or malformed — keep in-memory state */
+    } finally {
+      setStorageReady(true);
     }
-    hydrated.current = true;
   }, []);
 
   useEffect(() => {
-    if (!hydrated.current) return;
+    if (!storageReady) return;
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify({ bag, wishlist }));
+      localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify({
+          version: 2,
+          bag: bag.map(({ id, qty }) => ({ id, qty })),
+          wishlist,
+        }),
+      );
+      localStorage.removeItem(LEGACY_STORAGE_KEY);
     } catch {
       /* ignore quota / privacy mode */
     }
-  }, [bag, wishlist]);
+  }, [bag, wishlist, storageReady]);
 
   useEffect(() => () => window.clearTimeout(toastTimer.current), []);
 
@@ -87,10 +163,20 @@ export default function ShopProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const addToBag = useCallback(
-    (item: Omit<BagLine, "qty">) => {
+    (candidate: TrustedBagItem) => {
+      const item = trustedItem(candidate.id);
+      if (!item) return;
+
       setBag((prev) => {
-        const existing = prev.find((l) => l.id === item.id);
-        if (existing) return prev.map((l) => (l.id === item.id ? { ...l, qty: l.qty + 1 } : l));
+        const existing = prev.find((line) => line.id === item.id);
+        if (existing) {
+          return prev.map((line) =>
+            line.id === item.id
+              ? { ...line, qty: Math.min(MAX_ITEM_QTY, line.qty + 1) }
+              : line,
+          );
+        }
+        if (prev.length >= MAX_BAG_LINES) return prev;
         return [...prev, { ...item, qty: 1 }];
       });
       notify(`${item.name} added to your bag`);
@@ -99,13 +185,26 @@ export default function ShopProvider({ children }: { children: ReactNode }) {
   );
 
   const addManyToBag = useCallback(
-    (items: Omit<BagLine, "qty">[], label: string) => {
+    (candidates: TrustedBagItem[], label: string) => {
+      const items = candidates
+        .map((candidate) => trustedItem(candidate.id))
+        .filter((item): item is TrustedBagItem => Boolean(item));
+
+      if (!items.length) return;
+
       setBag((prev) => {
         let next = prev;
         for (const item of items) {
-          next = next.some((l) => l.id === item.id)
-            ? next.map((l) => (l.id === item.id ? { ...l, qty: l.qty + 1 } : l))
-            : [...next, { ...item, qty: 1 }];
+          const existing = next.find((line) => line.id === item.id);
+          if (existing) {
+            next = next.map((line) =>
+              line.id === item.id
+                ? { ...line, qty: Math.min(MAX_ITEM_QTY, line.qty + 1) }
+                : line,
+            );
+          } else if (next.length < MAX_BAG_LINES) {
+            next = [...next, { ...item, qty: 1 }];
+          }
         }
         return next;
       });
@@ -115,17 +214,22 @@ export default function ShopProvider({ children }: { children: ReactNode }) {
   );
 
   const removeFromBag = useCallback((id: string) => {
-    setBag((prev) => prev.filter((l) => l.id !== id));
+    setBag((prev) => prev.filter((line) => line.id !== id));
   }, []);
 
   const toggleWish = useCallback((id: string) => {
-    setWishlist((prev) => (prev.includes(id) ? prev.filter((w) => w !== id) : [...prev, id]));
+    if (!trustedCatalog.has(id)) return;
+    setWishlist((prev) => {
+      if (prev.includes(id)) return prev.filter((wishId) => wishId !== id);
+      if (prev.length >= MAX_WISHLIST) return prev;
+      return [...prev, id];
+    });
   }, []);
 
   const value = useMemo<ShopState>(
     () => ({
       bag,
-      bagCount: bag.reduce((n, l) => n + l.qty, 0),
+      bagCount: bag.reduce((n, line) => n + line.qty, 0),
       wishlist,
       addToBag,
       addManyToBag,

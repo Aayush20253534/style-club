@@ -7,7 +7,10 @@
     "build": "next build",
     "start": "next start",
     "typecheck": "next typegen && tsc --noEmit",
-    "check": "npm run typecheck && npm run build"
+    "check": "npm run typecheck && npm run build",
+    "security:check": "node scripts/security-check.mjs",
+    "security:check:dist": "node scripts/security-check.mjs --dist",
+    "security:verify": "npm run security:check && npm audit --audit-level=high && npm run typecheck && npm run build && npm run security:check:dist"
   },
   "dependencies": {
     "framer-motion": "^13.4.2",

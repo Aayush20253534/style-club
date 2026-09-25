@@ -21,17 +21,30 @@ const contentSecurityPolicy = [
   "upgrade-insecure-requests",
 ].join("; ");
 
+const permissionsPolicy = [
+  "accelerometer=()",
+  "browsing-topics=()",
+  "camera=()",
+  "display-capture=()",
+  "geolocation=()",
+  "gyroscope=()",
+  "magnetometer=()",
+  "microphone=()",
+  "payment=()",
+  "usb=()",
+].join(", ");
+
 const securityHeaders = [
   ...(isProduction
     ? [
         { key: "Content-Security-Policy", value: contentSecurityPolicy },
-        { key: "Strict-Transport-Security", value: "max-age=31536000; includeSubDomains" },
+        { key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains" },
       ]
     : []),
   { key: "X-Content-Type-Options", value: "nosniff" },
   { key: "X-Frame-Options", value: "DENY" },
   { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
-  { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=(), payment=(), usb=()" },
+  { key: "Permissions-Policy", value: permissionsPolicy },
   { key: "Cross-Origin-Opener-Policy", value: "same-origin" },
   { key: "Origin-Agent-Cluster", value: "?1" },
   { key: "X-Permitted-Cross-Domain-Policies", value: "none" },
@@ -41,6 +54,7 @@ const securityHeaders = [
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
+  productionBrowserSourceMaps: false,
   images: {
     formats: ["image/avif", "image/webp"],
     qualities: [70, 75, 80],

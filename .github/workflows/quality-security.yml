@@ -34,6 +34,9 @@ jobs:
       - name: Install locked dependencies
         run: npm ci
 
+      - name: Source security checks
+        run: npm run security:check
+
       - name: Audit dependencies
         run: npm audit --audit-level=high
 
@@ -44,3 +47,6 @@ jobs:
         env:
           SITE_URL: https://styleclubindia.com
         run: npm run build
+
+      - name: Built output security checks
+        run: npm run security:check:dist
