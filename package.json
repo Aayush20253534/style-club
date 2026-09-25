@@ -10,7 +10,11 @@
     "check": "npm run typecheck && npm run build",
     "security:check": "node scripts/security-check.mjs",
     "security:check:dist": "node scripts/security-check.mjs --dist",
-    "security:verify": "npm run security:check && npm audit --audit-level=high && npm run typecheck && npm run build && npm run security:check:dist"
+    "security:verify": "npm run security:check && npm audit --audit-level=high && npm run typecheck && npm run build && npm run security:check:dist",
+    "release:check": "node scripts/release-check.mjs",
+    "release:check:dist": "node scripts/release-check.mjs --dist",
+    "release:check:live": "node scripts/release-check.mjs --live",
+    "release:verify": "npm run security:verify && npm run release:check && npm run release:check:dist"
   },
   "dependencies": {
     "framer-motion": "^13.4.2",

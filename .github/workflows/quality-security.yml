@@ -37,6 +37,9 @@ jobs:
       - name: Source security checks
         run: npm run security:check
 
+      - name: Release source checks
+        run: npm run release:check
+
       - name: Audit dependencies
         run: npm audit --audit-level=high
 
@@ -45,8 +48,11 @@ jobs:
 
       - name: Production build
         env:
-          SITE_URL: https://styleclubindia.com
+          SITE_URL: ${{ vars.SITE_URL || 'https://styleclubindia.com' }}
         run: npm run build
 
       - name: Built output security checks
         run: npm run security:check:dist
+
+      - name: Release build checks
+        run: npm run release:check:dist
