@@ -3,7 +3,12 @@ node_modules
 out
 next-env.d.ts
 *.tsbuildinfo
-.env*.local
+
+# Local/deployment environment files. Keep the documented template only.
+.env
+.env.*
+!.env.example
+.vercel/
 
 # Raw research material (scraped listings/Instagram) — not used by the build
 details/
@@ -11,3 +16,6 @@ images/
 
 # Local tool config
 .claude/
+
+# Local patch artifacts
+*.patch

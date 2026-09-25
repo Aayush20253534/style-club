@@ -6,6 +6,7 @@ import MotionProvider from "@/components/layout/MotionProvider";
 import Header from "@/components/layout/Header";
 import { BagDrawer, SearchOverlay } from "@/components/layout/Overlays";
 import { contact, stores } from "@/lib/data";
+import { getSiteUrl } from "@/lib/site";
 import "./globals.css";
 
 const anton = Anton({ subsets: ["latin"], weight: "400", variable: "--font-anton", display: "swap" });
@@ -18,7 +19,7 @@ const instrument = Instrument_Serif({
 });
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://styleclubindia.com";
+const SITE_URL = getSiteUrl();
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -37,11 +38,12 @@ export const metadata: Metadata = {
     "denim",
     "kidswear",
   ],
-  alternates: { canonical: "/" },
+  alternates: { canonical: SITE_URL },
   openGraph: {
     type: "website",
     locale: "en_IN",
     siteName: "Style Club",
+    url: SITE_URL,
     title: "Style Club — Style that moves with you",
     description: "New arrivals every week for men, women and kids. Five stores across Prayagraj.",
     images: [{ url: "/og.jpg", width: 1200, height: 630, alt: "A model wearing the Style Club indigo denim jacket" }],
@@ -52,7 +54,17 @@ export const metadata: Metadata = {
     description: "New arrivals every week for men, women and kids. Five stores across Prayagraj.",
     images: ["/og.jpg"],
   },
-  robots: { index: true, follow: true },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
 };
 
 export const viewport: Viewport = {
