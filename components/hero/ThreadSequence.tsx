@@ -39,7 +39,7 @@ const STAGE_AT = [0, 0.1, 0.2, 0.4, 0.6, 0.7, 0.8, 0.9];
 /** Share of the pinned scroll spent playing the film; the rest holds on the model. */
 const FILM_END = 0.9;
 
-/** Coarse-to-fine load order so any scroll position has a nearby frame early. */
+/** Coarse-to-fine order so a lightweight first pass makes the whole film playable. */
 function loadOrder(count: number) {
   const seen = new Uint8Array(count);
   const order: number[] = [];
@@ -55,6 +55,46 @@ function loadOrder(count: number) {
     for (let i = 0; i < count; i += step) push(i);
   }
   return order;
+}
+
+type NetworkConnection = {
+  saveData?: boolean;
+  effectiveType?: string;
+};
+
+type NavigatorWithConnection = Navigator & {
+  connection?: NetworkConnection;
+};
+
+type IdleWindow = Window & {
+  requestIdleCallback?: (callback: () => void, options?: { timeout: number }) => number;
+  cancelIdleCallback?: (handle: number) => void;
+};
+
+function frameLoadProfile(src: Source) {
+  const connection = (navigator as NavigatorWithConnection).connection;
+  const constrained =
+    connection?.saveData === true ||
+    connection?.effectiveType === "slow-2g" ||
+    connection?.effectiveType === "2g" ||
+    connection?.effectiveType === "3g";
+
+  return {
+    initialCount: src === MOBILE ? 16 : 24,
+    concurrency: constrained ? 2 : src === MOBILE ? 3 : 4,
+    idleTimeout: constrained ? 1400 : 650,
+  };
+}
+
+function scheduleIdle(callback: () => void, timeout: number) {
+  const idleWindow = window as IdleWindow;
+  if (idleWindow.requestIdleCallback) {
+    const handle = idleWindow.requestIdleCallback(callback, { timeout });
+    return () => idleWindow.cancelIdleCallback?.(handle);
+  }
+
+  const handle = window.setTimeout(callback, timeout);
+  return () => window.clearTimeout(handle);
 }
 
 export default function ThreadSequence() {
@@ -122,12 +162,15 @@ export default function ThreadSequence() {
     // window around the playhead plus sparse anchor frames stay decoded, which
     // keeps memory bounded however long the film is.
     const canBitmap = typeof createImageBitmap === "function";
+    const profile = frameLoadProfile(src);
+    const requestController = new AbortController();
     const blobs: (Blob | null)[] = new Array(src.count).fill(null);
     const frames = new Map<number, ImageBitmap | HTMLImageElement>();
     const decoding = new Set<number>();
+    const pendingImages = new Set<HTMLImageElement>();
     const ANCHOR = src === MOBILE ? 15 : 20;
     const WINDOW = src === MOBILE ? 12 : 10;
-    const MAX_DECODES = 3;
+    const MAX_DECODES = src === MOBILE ? 2 : 3;
     const isAnchor = (i: number) => i % ANCHOR === 0 || i === src.count - 1;
     let direction = 1;
     let scheduledAt = -1;
@@ -267,55 +310,100 @@ export default function ThreadSequence() {
       render();
     };
 
-    // Progressive, bounded-concurrency loader.
+    // Load a sparse playable pass first. The remaining frames fill in only
+    // after the browser becomes idle (or as soon as the user starts the film),
+    // so the sequence does not compete with initial page resources.
     const order = loadOrder(src.count);
-    let cursor = 0;
+    const queue = order.slice(0, profile.initialCount);
+    const background = order.slice(profile.initialCount);
+    const retries = new Uint8Array(src.count);
     let active = 0;
+    let backgroundStarted = false;
+
     const pump = () => {
-      while (!destroyed && active < 6 && cursor < order.length) {
-        const i = order[cursor++];
+      while (!destroyed && active < profile.concurrency && queue.length) {
+        const i = queue.shift()!;
         const url = frameUrl(src, i);
         active++;
+
         const done = () => {
           active--;
           pump();
         };
-        const onError = () => {
+
+        const onError = (error?: unknown) => {
+          if (
+            destroyed ||
+            requestController.signal.aborted ||
+            (error instanceof DOMException && error.name === "AbortError")
+          ) {
+            done();
+            return;
+          }
+
+          if (retries[i] === 0) {
+            retries[i] = 1;
+            queue.push(i);
+            done();
+            return;
+          }
+
           failures++;
           if (i === 0 || failures > src.count * 0.2) fail();
           done();
         };
 
         if (canBitmap) {
-          fetch(url)
+          fetch(url, {
+            cache: "force-cache",
+            credentials: "same-origin",
+            signal: requestController.signal,
+          })
             .then((r) => {
               if (!r.ok) throw new Error(`${r.status}`);
               return r.blob();
             })
             .then((blob) => {
-              if (destroyed) return;
-              blobs[i] = blob;
-              schedule();
+              if (!destroyed) {
+                blobs[i] = blob;
+                schedule();
+              }
               done();
-            }, onError);
+            })
+            .catch(onError);
         } else {
           // Older engines: plain images (decoded on first draw).
           const img = new Image();
+          pendingImages.add(img);
           img.decoding = "async";
           img.onload = () => {
-            if (destroyed) return;
-            frames.set(i, img);
-            if (drawn < 0 || Math.abs(i - target) < Math.abs(drawn - target)) {
-              drawn = -1;
-              render();
+            pendingImages.delete(img);
+            if (!destroyed) {
+              frames.set(i, img);
+              if (drawn < 0 || Math.abs(i - target) < Math.abs(drawn - target)) {
+                drawn = -1;
+                render();
+              }
             }
             done();
           };
-          img.onerror = onError;
+          img.onerror = (error) => {
+            pendingImages.delete(img);
+            onError(error);
+          };
           img.src = url;
         }
       }
     };
+
+    const startBackground = () => {
+      if (backgroundStarted || destroyed) return;
+      backgroundStarted = true;
+      queue.push(...background);
+      pump();
+    };
+
+    const cancelBackgroundStart = scheduleIdle(startBackground, profile.idleTimeout);
     pump();
 
     const ro = new ResizeObserver(resize);
@@ -359,6 +447,7 @@ export default function ThreadSequence() {
             target = proxy.f;
             const p = proxy.f / (src.count - 1);
             filmProgressRef.current = p;
+            if (p > 0.015) startBackground();
             if (failedRef.current) fallbackRef.current?.render(p);
             else render();
             setStage(p);
@@ -405,9 +494,17 @@ export default function ThreadSequence() {
 
     return () => {
       destroyed = true;
+      cancelBackgroundStart();
+      requestController.abort();
       window.removeEventListener("load", onLoad);
       ro.disconnect();
       gctx.revert();
+      pendingImages.forEach((img) => {
+        img.onload = null;
+        img.onerror = null;
+        img.src = "";
+      });
+      pendingImages.clear();
       frames.forEach(release);
       frames.clear();
       blobs.fill(null);

@@ -7,6 +7,11 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 let lenis: Lenis | null = null;
 
+type IdleWindow = Window & {
+  requestIdleCallback?: (callback: () => void, options?: { timeout: number }) => number;
+  cancelIdleCallback?: (handle: number) => void;
+};
+
 export const getLenis = () => lenis;
 
 /** Scroll to an element or selector, through Lenis when it is running. */
@@ -29,14 +34,14 @@ export function scrollToTarget(target: string | HTMLElement, offset = 0) {
  */
 export default function SmoothScroll() {
   useEffect(() => {
-    gsap.registerPlugin(ScrollTrigger);
-
     const media = window.matchMedia("(prefers-reduced-motion: reduce)");
     const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)");
     let tick: ((time: number) => void) | null = null;
+    let cancelScheduledStart = () => {};
 
     const start = () => {
       if (lenis || media.matches || !finePointer.matches) return;
+      gsap.registerPlugin(ScrollTrigger);
       lenis = new Lenis({
         lerp: 0.11,
         smoothWheel: true,
@@ -57,12 +62,37 @@ export default function SmoothScroll() {
       lenis = null;
     };
 
-    const onChange = () => (media.matches ? stop() : start());
+    const scheduleStart = () => {
+      cancelScheduledStart();
+      if (media.matches || !finePointer.matches) return;
 
-    start();
+      const idleWindow = window as IdleWindow;
+      if (idleWindow.requestIdleCallback) {
+        const handle = idleWindow.requestIdleCallback(start, { timeout: 1000 });
+        cancelScheduledStart = () => idleWindow.cancelIdleCallback?.(handle);
+        return;
+      }
+
+      const handle = window.setTimeout(start, 180);
+      cancelScheduledStart = () => window.clearTimeout(handle);
+    };
+
+    const onChange = () => {
+      if (media.matches || !finePointer.matches) {
+        cancelScheduledStart();
+        stop();
+        return;
+      }
+      scheduleStart();
+    };
+
+    scheduleStart();
     media.addEventListener("change", onChange);
+    finePointer.addEventListener("change", onChange);
     return () => {
+      cancelScheduledStart();
       media.removeEventListener("change", onChange);
+      finePointer.removeEventListener("change", onChange);
       stop();
     };
   }, []);
