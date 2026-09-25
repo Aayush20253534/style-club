@@ -424,7 +424,7 @@ export default function ThreadSequence() {
       className="relative h-[520svh] bg-ink text-white md:h-[700svh] motion-reduce:h-svh"
     >
       <h1 id="film-title" className="sr-only">
-        Style Club — fashion for men, women and kids in Prayagraj. Style that moves with you.
+        Style Club Prayagraj — clothing and fashion for men, women and kids.
       </h1>
 
       <div className="sticky top-0 h-svh overflow-hidden">

@@ -46,7 +46,7 @@ export default function Stores() {
               <div className="relative aspect-[4/3.4]">
                 <Image
                   src={interior}
-                  alt="Inside the Katra store — racks of shirts, denim and kidswear"
+                  alt="Inside Style Club Katra in Prayagraj — racks of shirts, denim and kidswear"
                   fill
                   sizes="(min-width: 1024px) 20vw, 36vw"
                   className="object-cover"
@@ -66,8 +66,8 @@ export default function Stores() {
             </h2>
             <Reveal delay={0.1}>
               <p className="mt-6 max-w-md text-[15px] leading-relaxed text-mute">
-                The full collection lives in store. Walk in, try everything, and our team will help you put the look
-                together.
+                Visit Style Club in Katra, Civil Lines, Naini or Phaphamau in Prayagraj, or Bharwari in Kaushambi.
+                Try the collection in store and let our team help you put the look together.
               </p>
             </Reveal>
 

@@ -50,7 +50,7 @@ export default function Footer() {
 
         <div className="flex flex-col gap-2 py-8 text-[12px] text-paper/45 sm:flex-row sm:justify-between">
           <p>© {new Date().getFullYear()} Style Club, Prayagraj. All rights reserved.</p>
-          <p>Men’s · Women’s · Kidswear</p>
+          <p>Men’s · Women’s · Kidswear · Prayagraj</p>
         </div>
       </div>
     </footer>

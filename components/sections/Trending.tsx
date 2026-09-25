@@ -55,7 +55,7 @@ export default function Trending() {
         <div className="flex items-end justify-between gap-6">
           <div>
             <Reveal>
-              <p className="eyebrow text-mute">03 — Most loved this month</p>
+              <p className="eyebrow text-mute">03 — Trending at Style Club</p>
             </Reveal>
             <h2 id="trending-title" className="display mt-5 text-[14vw] md:text-[clamp(4.5rem,7.6vw,8rem)]">
               <MaskLines lines={["Trending", "collection"]} />

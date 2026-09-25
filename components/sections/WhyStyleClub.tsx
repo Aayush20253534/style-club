@@ -6,20 +6,20 @@ import { MaskLines, Reveal } from "@/components/ui/Reveal";
 
 const REASONS = [
   {
-    title: "Five stores, one city",
-    body: "Katra, Civil Lines, Naini, Phaphamau and Bharwari — there’s a Style Club close to home.",
+    title: "Five stores, close to home",
+    body: "Visit Katra, Civil Lines, Naini or Phaphamau in Prayagraj, or Style Club Bharwari in Kaushambi.",
   },
   {
     title: "The whole family",
     body: "Men’s, women’s and kidswear under one roof, so one trip sorts everyone’s wardrobe.",
   },
   {
-    title: "Fair prices, real sales",
-    body: "Everyday value, plus seasonal sales with up to 60% off and gifts on bigger bills.",
+    title: "Everyday variety",
+    body: "Explore ethnic wear, denim, everyday fashion, occasion styles, footwear and accessories across departments.",
   },
   {
-    title: "New every week",
-    body: "Fresh styles land in store every week — ethnic, denim, workwear and play.",
+    title: "Fresh seasonal edits",
+    body: "Discover new-season looks across ethnic wear, denim, workwear, kidswear and accessories.",
   },
 ];
 

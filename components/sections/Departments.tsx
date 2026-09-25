@@ -25,8 +25,8 @@ export default function Departments() {
           </div>
           <Reveal delay={0.1} className="max-w-sm md:pb-3">
             <p className="text-[15px] leading-relaxed text-paper/65">
-              Everything under one roof — from festive kurta sets to school-run basics. Pick a department to see what’s
-              new in it.
+              Men’s, women’s and kidswear at Style Club in Prayagraj — from festive kurta sets and denim to easy
+              everyday styles. Pick a department to filter the latest edit.
             </p>
           </Reveal>
         </div>

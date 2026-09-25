@@ -28,8 +28,8 @@ export default function NewArrivals() {
           <div className="min-w-0 md:col-span-5">
             <Reveal delay={0.1}>
               <p className="max-w-md text-[15px] leading-relaxed text-mute">
-                Fresh drops every week across our five Prayagraj stores — co-ords and kurta sets, easy denim, and the
-                pieces kids actually want to wear.
+                Explore Style Club fashion for men, women and kids in Prayagraj — from co-ords and kurta sets to denim,
+                everyday kidswear and accessories. Browse the edit, then try your favourites in store.
               </p>
             </Reveal>
             <Reveal delay={0.16}>
