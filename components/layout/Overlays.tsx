@@ -161,7 +161,12 @@ export function BagDrawer() {
                   <a href={contact.phones[0].href} className="btn btn-royal justify-center">
                     <Phone className="size-4" aria-hidden /> Call to reserve
                   </a>
-                  <button type="button" onClick={() => (close(), scrollToTarget("#stores", -72))} className="btn btn-outline justify-center">
+                  <button type="button" onClick={() => {
+                    close();
+                    window.requestAnimationFrame(() => {
+                      window.requestAnimationFrame(() => scrollToTarget("#stores", -72));
+                    });
+                  }} className="btn btn-outline justify-center">
                     Find a store
                   </button>
                 </div>
