@@ -164,7 +164,7 @@ export function BagDrawer() {
                   <button type="button" onClick={() => {
                     close();
                     window.requestAnimationFrame(() => {
-                      window.requestAnimationFrame(() => scrollToTarget("#stores", -72));
+                      window.requestAnimationFrame(() => scrollToTarget("#stores"));
                     });
                   }} className="btn btn-outline justify-center">
                     Find a store

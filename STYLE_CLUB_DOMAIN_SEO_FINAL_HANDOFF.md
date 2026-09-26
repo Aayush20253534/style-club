@@ -324,14 +324,14 @@ Current website data includes:
 
 ```text
 Netram Chauraha, Old Katra, Prayagraj, UP 211002
-098380 70333
++91 91989 03333
 ```
 
 Confirm this is still correct.
 
 ## Civil Lines
 
-Current website has only a general Civil Lines address.
+The website marks Civil Lines as **Coming Soon** and currently has only a general Civil Lines address.
 
 Get the client's **exact street address and PIN code** if available.
 

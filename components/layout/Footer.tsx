@@ -22,9 +22,18 @@ export default function Footer() {
             <ul className="mt-5 grid grid-cols-2 gap-x-6 gap-y-2.5 text-[14px]">
               {stores.map((s) => (
                 <li key={s.id}>
-                  <a href={s.mapUrl} target="_blank" rel="noreferrer" className="link-draw text-paper/80 hover:text-white">
-                    {s.name}
-                  </a>
+                  {s.comingSoon ? (
+                    <span className="inline-flex flex-wrap items-center gap-2 text-paper/55">
+                      {s.name}
+                      <span className="eyebrow rounded-full border border-white/20 px-2 py-0.5 text-[8px] tracking-[0.18em] text-paper/70">
+                        Soon
+                      </span>
+                    </span>
+                  ) : (
+                    <a href={s.mapUrl} target="_blank" rel="noreferrer" className="link-draw text-paper/80 hover:text-white">
+                      {s.name}
+                    </a>
+                  )}
                 </li>
               ))}
             </ul>

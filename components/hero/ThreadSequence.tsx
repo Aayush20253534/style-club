@@ -623,7 +623,7 @@ export default function ThreadSequence() {
                 <button type="button" onClick={() => scrollToTarget("#new-arrivals", -72)} className="btn btn-light justify-center">
                   Shop new arrivals <ArrowRight className="size-4" aria-hidden />
                 </button>
-                <button type="button" onClick={() => scrollToTarget("#stores", -72)} className="btn btn-ghost-light justify-center">
+                <button type="button" onClick={() => scrollToTarget("#stores")} className="btn btn-ghost-light justify-center">
                   <MapPin className="size-4" aria-hidden /> Find a store
                 </button>
               </div>

@@ -6,8 +6,8 @@ import { MaskLines, Reveal } from "@/components/ui/Reveal";
 
 const REASONS = [
   {
-    title: "Five stores, close to home",
-    body: "Visit Katra, Civil Lines, Naini or Phaphamau in Prayagraj, or Style Club Bharwari in Kaushambi.",
+    title: "Close to home, growing soon",
+    body: "Visit Katra, Naini or Phaphamau in Prayagraj, or Bharwari in Kaushambi. Civil Lines is coming soon.",
   },
   {
     title: "The whole family",

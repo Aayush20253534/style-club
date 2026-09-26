@@ -2,7 +2,7 @@ import { contact, stores } from "@/lib/data";
 
 const PAGE_NAME = "Style Club Prayagraj | Clothing for Men, Women & Kids";
 const PAGE_DESCRIPTION =
-  "Explore men’s, women’s and kids’ fashion at Style Club, with stores in Katra, Civil Lines, Naini and Phaphamau in Prayagraj, plus Bharwari in Kaushambi.";
+  "Explore men’s, women’s and kids’ fashion at Style Club, with stores in Katra, Naini and Phaphamau in Prayagraj, plus Bharwari in Kaushambi. Civil Lines is coming soon.";
 
 const phone = (href: string) => href.replace(/^tel:/, "");
 
@@ -48,11 +48,12 @@ export function buildSiteJsonLd(siteUrl: string) {
   const websiteId = `${siteUrl}/#website`;
   const webpageId = `${siteUrl}/#webpage`;
 
-  const storeRefs = stores.map((store) => ({
+  const openStores = stores.filter((store) => !store.comingSoon);
+  const storeRefs = openStores.map((store) => ({
     "@id": `${siteUrl}/#store-${store.id}`,
   }));
 
-  const storeNodes = stores.map((store) => {
+  const storeNodes = openStores.map((store) => {
     const knownAddress = STORE_ADDRESSES[store.id];
     const address = knownAddress ?? {
       streetAddress: store.address,
@@ -90,7 +91,7 @@ export function buildSiteJsonLd(siteUrl: string) {
         "@id": organizationId,
         name: "Style Club",
         url: siteUrl,
-        telephone: phone(contact.phones[1].href),
+        telephone: phone(contact.phones[0].href),
         sameAs: [contact.instagram.url],
         subOrganization: storeRefs,
       },

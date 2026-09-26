@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     template: "%s · Style Club",
   },
   description:
-    "Explore men’s, women’s and kids’ fashion at Style Club, with stores in Katra, Civil Lines, Naini and Phaphamau in Prayagraj, plus Bharwari in Kaushambi.",
+    "Explore men’s, women’s and kids’ fashion at Style Club, with stores in Katra, Naini and Phaphamau in Prayagraj, plus Bharwari in Kaushambi. Civil Lines is coming soon.",
   keywords: [
     "Style Club Prayagraj",
     "clothing store in Prayagraj",
@@ -49,13 +49,13 @@ export const metadata: Metadata = {
     siteName: "Style Club",
     url: SITE_URL,
     title: "Style Club Prayagraj | Fashion for Men, Women & Kids",
-    description: "Explore fashion for men, women and kids at Style Club in Katra, Civil Lines, Naini, Phaphamau and Bharwari.",
+    description: "Explore fashion for men, women and kids at Style Club in Katra, Naini, Phaphamau and Bharwari. Civil Lines is coming soon.",
     images: [{ url: "/og.jpg", width: 1200, height: 630, alt: "A model wearing the Style Club indigo denim jacket" }],
   },
   twitter: {
     card: "summary_large_image",
     title: "Style Club Prayagraj | Fashion for Men, Women & Kids",
-    description: "Explore fashion for men, women and kids at Style Club in Katra, Civil Lines, Naini, Phaphamau and Bharwari.",
+    description: "Explore fashion for men, women and kids at Style Club in Katra, Naini, Phaphamau and Bharwari. Civil Lines is coming soon.",
     images: ["/og.jpg"],
   },
   robots: {

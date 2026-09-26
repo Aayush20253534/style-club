@@ -62,8 +62,9 @@ export default function Header() {
   const go = (item: NavItem) => {
     if (item.filter) setFilter(item.filter);
     setMenuOpen(false);
+    const offset = item.target === "#stores" ? 0 : -72;
     // Let the drawer release the scroll lock before travelling.
-    requestAnimationFrame(() => scrollToTarget(item.target, -72));
+    requestAnimationFrame(() => scrollToTarget(item.target, offset));
   };
 
   const dark = onDark && !menuOpen;
@@ -194,7 +195,7 @@ export default function Header() {
               >
                 <div>
                   <p className="eyebrow text-mute">Stores</p>
-                  <p className="mt-2">{stores.map((s) => s.name).join(" · ")}</p>
+                  <p className="mt-2">{stores.map((s) => s.comingSoon ? `${s.name} — Coming Soon` : s.name).join(" · ")}</p>
                 </div>
                 <div className="flex flex-wrap gap-x-6 gap-y-2">
                   <a href={contact.phones[0].href} className="link-draw">

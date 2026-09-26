@@ -282,9 +282,10 @@ export type Store = {
   name: string;
   area: string;
   address: string;
-  mapUrl: string;
+  mapUrl?: string;
   flagship?: boolean;
   hours?: string;
+  comingSoon?: boolean;
 };
 
 const mapsSearch = (q: string) =>
@@ -305,7 +306,7 @@ export const stores: Store[] = [
     name: "Civil Lines",
     area: "Prayagraj",
     address: "Civil Lines, Prayagraj, Uttar Pradesh",
-    mapUrl: mapsSearch("Style Club Civil Lines Prayagraj"),
+    comingSoon: true,
   },
   {
     id: "naini",
@@ -331,10 +332,7 @@ export const stores: Store[] = [
 ];
 
 export const contact = {
-  phones: [
-    { label: "Katra store", display: "098380 70333", href: "tel:+919838070333" },
-    { label: "Customer line", display: "+91 89573 79512", href: "tel:+918957379512" },
-  ],
+  phones: [{ label: "Contact", display: "+919198903333", href: "tel:+919198903333" }],
   instagram: {
     handle: "@style_club_prayagraj",
     url: "https://www.instagram.com/style_club_prayagraj",
