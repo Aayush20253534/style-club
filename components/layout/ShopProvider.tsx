@@ -14,7 +14,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Check } from "lucide-react";
 import { allProducts, look, type Category } from "@/lib/data";
 
-type BagLine = { id: string; name: string; price: number; image: string; qty: number };
+type BagLine = { id: string; name: string; image: string; qty: number };
 type TrustedBagItem = Omit<BagLine, "qty">;
 
 type ShopState = {
@@ -50,7 +50,6 @@ for (const item of [...allProducts, ...look.items]) {
     trustedCatalog.set(item.id, {
       id: item.id,
       name: item.name,
-      price: item.price,
       image: item.image,
     });
   }
@@ -119,7 +118,7 @@ export default function ShopProvider({ children }: { children: ReactNode }) {
   const toastTimer = useRef<number | undefined>(undefined);
 
   // Restore after mount so server and client markup match. Only IDs and
-  // quantities survive storage; names, prices and images come from our catalog.
+  // quantities survive storage; names and images come from our catalog.
   useEffect(() => {
     try {
       const raw = localStorage.getItem(STORAGE_KEY) ?? localStorage.getItem(LEGACY_STORAGE_KEY);

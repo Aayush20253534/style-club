@@ -3,7 +3,7 @@
 import { Heart, Plus } from "lucide-react";
 import RemoteImage from "./RemoteImage";
 import { useShop } from "@/components/layout/ShopProvider";
-import { discount, inr, type Product } from "@/lib/data";
+import { type Product } from "@/lib/data";
 
 export default function ProductCard({
   product,
@@ -18,7 +18,7 @@ export default function ProductCard({
 }) {
   const { addToBag, toggleWish, isWished } = useShop();
   const wished = isWished(product.id);
-  const add = () => addToBag({ id: product.id, name: product.name, price: product.price, image: product.image });
+  const add = () => addToBag({ id: product.id, name: product.name, image: product.image });
 
   return (
     <article className={`group relative ${className}`}>
@@ -78,14 +78,6 @@ export default function ProductCard({
           ))}
         </div>
       </div>
-      <p className="mt-1.5 flex flex-wrap items-baseline gap-x-2 text-[13px]">
-        <span className="font-semibold text-char">{inr(product.price)}</span>
-        <span className="text-mute line-through decoration-mute/60">
-          <span className="sr-only">MRP </span>
-          {inr(product.mrp)}
-        </span>
-        <span className="font-medium text-royal">{discount(product)}% off</span>
-      </p>
     </article>
   );
 }

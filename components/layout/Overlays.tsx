@@ -6,7 +6,7 @@ import { ArrowRight, Heart, Phone, Search, X } from "lucide-react";
 import RemoteImage from "@/components/ui/RemoteImage";
 import { useShop } from "./ShopProvider";
 import { getLenis, scrollToTarget } from "./SmoothScroll";
-import { allProducts, CATEGORY_LABEL, contact, inr, newArrivals } from "@/lib/data";
+import { allProducts, CATEGORY_LABEL, contact, newArrivals } from "@/lib/data";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
@@ -53,7 +53,6 @@ export function BagDrawer() {
   }, [bagOpen]);
 
   const saved = allProducts.filter((p) => wishlist.includes(p.id));
-  const subtotal = bag.reduce((n, l) => n + l.price * l.qty, 0);
 
   return (
     <AnimatePresence>
@@ -109,9 +108,7 @@ export function BagDrawer() {
                         </div>
                         <div className="flex min-w-0 flex-1 flex-col">
                           <p className="text-[14px] font-medium leading-snug">{l.name}</p>
-                          <p className="mt-1 text-[13px] text-mute">
-                            {inr(l.price)} {l.qty > 1 && <span>× {l.qty}</span>}
-                          </p>
+                          {l.qty > 1 && <p className="mt-1 text-[13px] text-mute">Quantity: {l.qty}</p>}
                           <button
                             type="button"
                             onClick={() => removeFromBag(l.id)}
@@ -120,7 +117,6 @@ export function BagDrawer() {
                             Remove
                           </button>
                         </div>
-                        <p className="text-[14px] font-semibold">{inr(l.price * l.qty)}</p>
                       </li>
                     ))}
                   </ul>
@@ -136,11 +132,10 @@ export function BagDrawer() {
                       </div>
                       <div className="flex min-w-0 flex-1 flex-col">
                         <p className="text-[14px] font-medium leading-snug">{p.name}</p>
-                        <p className="mt-1 text-[13px] text-mute">{inr(p.price)}</p>
                         <div className="mt-auto flex gap-4">
                           <button
                             type="button"
-                            onClick={() => addToBag({ id: p.id, name: p.name, price: p.price, image: p.image })}
+                            onClick={() => addToBag({ id: p.id, name: p.name, image: p.image })}
                             className="link-draw text-[12px] font-medium text-royal"
                           >
                             Move to bag
@@ -159,10 +154,6 @@ export function BagDrawer() {
 
             {tab === "bag" && bag.length > 0 && (
               <div className="border-t border-line px-6 py-6">
-                <div className="flex items-baseline justify-between">
-                  <p className="eyebrow text-mute">Subtotal</p>
-                  <p className="text-[20px] font-semibold">{inr(subtotal)}</p>
-                </div>
                 <p className="mt-3 text-[13px] leading-relaxed text-mute">
                   Call us to reserve these pieces for pickup at your nearest Style Club.
                 </p>
@@ -301,7 +292,6 @@ export function SearchOverlay() {
                           />
                         </div>
                         <p className="mt-2.5 text-[13.5px] font-medium">{p.name}</p>
-                        <p className="text-[13px] text-mute">{inr(p.price)}</p>
                       </button>
                     </li>
                   ))}

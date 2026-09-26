@@ -6,17 +6,16 @@ import { ArrowRight, Plus } from "lucide-react";
 import RemoteImage from "@/components/ui/RemoteImage";
 import { MaskLines, Reveal } from "@/components/ui/Reveal";
 import { useShop } from "@/components/layout/ShopProvider";
-import { inr, look } from "@/lib/data";
+import { look } from "@/lib/data";
 
 export default function ShopTheLook() {
   const [active, setActive] = useState<number | null>(null);
   const { addToBag, addManyToBag } = useShop();
   const reduce = useReducedMotion();
-  const total = look.items.reduce((n, i) => n + i.price, 0);
 
   const addLook = () =>
     addManyToBag(
-      look.items.map((i) => ({ id: i.id, name: i.name, price: i.price, image: i.image })),
+      look.items.map((i) => ({ id: i.id, name: i.name, image: i.image })),
       `The complete look (${look.items.length} pieces) added to your bag`,
     );
 
@@ -42,7 +41,7 @@ export default function ShopTheLook() {
                   onFocus={() => setActive(i)}
                   onBlur={() => setActive(null)}
                   onClick={() => setActive((a) => (a === i ? null : i))}
-                  aria-label={`${item.name}, ${inr(item.price)}`}
+                  aria-label={item.name}
                   aria-describedby={`look-item-${i}`}
                   className={`relative -ml-4 -mt-4 inline-flex size-8 items-center justify-center rounded-full text-[11px] font-semibold transition-colors duration-200 ${
                     active === i ? "bg-royal text-white" : "bg-white text-char"
@@ -63,7 +62,6 @@ export default function ShopTheLook() {
                       }`}
                     >
                       <span className="block font-medium">{item.name}</span>
-                      <span className="text-mute">{inr(item.price)}</span>
                     </motion.div>
                   )}
                 </AnimatePresence>
@@ -109,11 +107,10 @@ export default function ShopTheLook() {
                     </div>
                     <div className="min-w-0 flex-1">
                       <p className="truncate text-[14.5px] font-medium">{item.name}</p>
-                      <p className="text-[13px] text-mute">{inr(item.price)}</p>
                     </div>
                     <button
                       type="button"
-                      onClick={() => addToBag({ id: item.id, name: item.name, price: item.price, image: item.image })}
+                      onClick={() => addToBag({ id: item.id, name: item.name, image: item.image })}
                       aria-label={`Add ${item.name} to bag`}
                       className="inline-flex size-10 shrink-0 items-center justify-center border border-line transition-colors duration-200 hover:border-char hover:bg-char hover:text-paper"
                     >
@@ -127,9 +124,7 @@ export default function ShopTheLook() {
 
           <Reveal delay={0.2}>
             <div className="mt-8 flex flex-wrap items-center justify-between gap-5">
-              <p className="text-[14px] text-mute">
-                Complete look <span className="ml-2 text-[20px] font-semibold text-char">{inr(total)}</span>
-              </p>
+              <p className="text-[14px] text-mute">Complete look - {look.items.length} pieces</p>
               <button type="button" onClick={addLook} className="btn btn-royal">
                 Add the look <ArrowRight className="size-4" aria-hidden />
               </button>
