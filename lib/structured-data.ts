@@ -61,12 +61,19 @@ export function buildSiteJsonLd(siteUrl: string) {
       addressRegion: "Uttar Pradesh",
     };
 
+    const locality =
+      store.id === "bharwari"
+        ? "Bharwari, Kaushambi"
+        : `${store.name}, Prayagraj`;
+
     const node: Record<string, unknown> = {
       "@type": "ClothingStore",
       "@id": `${siteUrl}/#store-${store.id}`,
       name: `Style Club ${store.name}`,
       url: `${siteUrl}/#stores`,
       parentOrganization: { "@id": organizationId },
+      description:
+        `Style Club ${store.name} is a clothing store in ${locality} for men’s, women’s and kidswear, including ethnic wear, denim, everyday fashion, footwear and accessories.`,
       hasMap: store.mapUrl,
       address: {
         "@type": "PostalAddress",
@@ -92,6 +99,8 @@ export function buildSiteJsonLd(siteUrl: string) {
         name: "Style Club",
         url: siteUrl,
         telephone: phone(contact.phones[0].href),
+        description:
+          "Style Club is a clothing retailer serving Prayagraj and Bharwari with men’s, women’s and kidswear, ethnic wear, denim, footwear and accessories.",
         sameAs: [contact.instagram.url],
         subOrganization: storeRefs,
       },

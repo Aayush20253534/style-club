@@ -66,8 +66,9 @@ export default function Stores() {
             </h2>
             <Reveal delay={0.1}>
               <p className="mt-6 max-w-md text-[15px] leading-relaxed text-mute">
-                Visit Style Club in Katra, Naini or Phaphamau in Prayagraj, or Bharwari in Kaushambi.
-                Our Civil Lines store is coming soon.
+                Looking for a clothing store in Prayagraj? Visit Style Club for men’s, women’s and
+                kids’ clothing in Katra, Naini or Phaphamau, or shop with us in Bharwari, Kaushambi.
+                Our Civil Lines location is coming soon.
               </p>
             </Reveal>
 
@@ -109,6 +110,9 @@ export default function Stores() {
                             )}
                           </h3>
                           <address className="mt-2 text-[14px] not-italic text-mute">{s.address}</address>
+                          <p className="mt-1.5 text-[13px] text-mute">
+                            Men’s, women’s &amp; kids’ clothing · Ethnic, denim &amp; everyday fashion
+                          </p>
                           {s.hours && (
                             <p className="mt-1.5 flex items-center gap-1.5 text-[13px] text-char">
                               <Clock className="size-3.5" aria-hidden /> {s.hours}
