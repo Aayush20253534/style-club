@@ -16,7 +16,9 @@ npm run build && npm start
 npm run typecheck
 ```
 
-Set `NEXT_PUBLIC_SITE_URL` in production (used for canonical URLs, Open Graph, sitemap and JSON-LD).
+Set `SITE_URL=https://styleclub.fashion` in production. It is used for canonical URLs,
+Open Graph URLs, `robots.txt`, `sitemap.xml` and JSON-LD. `lib/site.ts` also uses the
+same production domain as a safe fallback if the environment variable is missing.
 
 ## Stack
 

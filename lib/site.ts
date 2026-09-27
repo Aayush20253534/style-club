@@ -1,4 +1,4 @@
-const DEFAULT_SITE_URL = "https://styleclubindia.com";
+const DEFAULT_SITE_URL = "https://styleclub.fashion";
 
 function isLocalHost(hostname: string) {
   return hostname === "localhost" || hostname === "127.0.0.1";
