@@ -1,0 +1,158 @@
+STYLE CLUB SEO — FOLLOW-UP TASKS
+Domain: https://www.styleclub.fashion/
+Repo: https://github.com/Aayush20253534/style-club
+
+CURRENT STATUS
+==============
+Completed:
+- Production domain configured
+- Canonical URL aligned to https://www.styleclub.fashion/
+- robots.txt configured
+- sitemap.xml configured
+- Google Search Console Domain Property verified
+- Sitemap submitted
+- Homepage indexing requested
+- Technical SEO implemented
+- Metadata / Open Graph / Twitter metadata implemented
+- LocalBusiness / ClothingStore structured data implemented
+- Civil Lines correctly excluded from live ClothingStore schema while marked Coming Soon
+- Local on-page SEO strengthened for Prayagraj, Katra, Naini, Phaphamau and Bharwari
+- Release verification / live SEO checks configured
+
+REQUIRED FOLLOW-UP
+==================
+
+1. GOOGLE BUSINESS PROFILE
+Do this after the client provides access / verification.
+
+Open/claim the existing profiles for:
+- Style Club Katra
+- Style Club Naini
+- Style Club Phaphamau
+- Style Club Bharwari
+
+Do NOT create a duplicate profile if an existing listing is already present.
+
+For every open store:
+- Primary category: Clothing store
+- Add exact physical address
+- Add exact map pin
+- Add actual opening hours
+- Add actual branch/customer phone
+- Website: https://www.styleclub.fashion/
+- Upload genuine storefront/interior/product photos
+- Keep business name as the real-world name: Style Club
+- Add secondary categories only when genuinely applicable
+
+Do NOT create/activate Civil Lines until that location is actually operating.
+
+Important:
+Verify exact branch addresses with the client before changing website/Google data.
+In particular, Naini and Bharwari currently do not have fully verified address details in the website data.
+
+After profiles are active:
+- Keep Name / Address / Phone consistent between Google and website
+- Ask genuine customers for Google reviews
+- Reply to reviews professionally
+- Keep hours and photos updated
+
+
+2. OFFICIAL SOCIAL / AUTHORITY LINKS
+Do this after access to Style Club's social accounts is received.
+
+Instagram:
+Account: @style_club_prayagraj
+Add website:
+https://www.styleclub.fashion/
+
+Also add the same canonical website URL to any genuine official:
+- Facebook
+- YouTube
+- LinkedIn
+- Pinterest
+- Threads
+Only use accounts that actually belong to Style Club.
+
+BrandSpace:
+- Add/confirm a portfolio backlink from the Style Club project to:
+  https://www.styleclub.fashion/
+- Use natural anchor text such as:
+  Style Club
+  Visit Style Club
+
+Future genuine backlinks can come from:
+- Prayagraj/local publications
+- Fashion or retail events
+- Official brand/partner mentions
+- Sponsorships
+- Genuine local collaborations
+
+Avoid:
+- Paid backlink packages
+- Automated backlink creation
+- Bulk low-quality directories
+- Keyword-stuffed anchor text
+
+
+LATER MONITORING
+================
+Start this only after Google has collected enough Search Console data.
+
+Google Search Console:
+Performance -> Search results
+
+Review:
+- Queries
+- Pages
+- Impressions
+- Clicks
+- CTR
+- Average position
+
+Watch especially for queries around:
+- Style Club Prayagraj
+- clothing store in Prayagraj
+- clothes shop in Prayagraj
+- fashion store Prayagraj
+- men's clothing / mens wear Prayagraj
+- women's clothing / womens wear Prayagraj
+- kidswear / kids clothing Prayagraj
+- clothing store Katra
+- clothing store Naini
+- clothing store Phaphamau
+- Style Club Bharwari
+
+Use real Search Console query data before making further SEO copy changes.
+
+When meaningful data appears:
+- Improve titles/descriptions around queries already getting impressions
+- Strengthen content only where Search Console shows opportunity
+- Check indexing and canonical status
+- Resubmit sitemap only when needed
+- Request indexing after significant SEO/content changes
+
+
+OPTIONAL — NOT REQUIRED RIGHT NOW
+=================================
+These can be done later but are lower priority than Google Business Profile and genuine backlinks:
+- Bing Places
+- Apple Business Connect
+- Mappls / MapmyIndia
+- Relevant reputable local directories
+
+Do not spend time mass-submitting Style Club to generic SEO directories.
+
+
+FINAL PRIORITY ORDER
+====================
+1. Google Business Profile access + optimization
+2. Official Instagram/social website links + BrandSpace backlink
+3. Search Console monitoring once enough data exists
+4. Optional citation platforms only if useful
+
+No major additional code-side SEO work is currently required unless:
+- branch details change,
+- Civil Lines opens,
+- exact store addresses/phones/hours are provided,
+- Search Console data reveals a specific opportunity,
+- or new pages/features are added.
