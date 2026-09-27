@@ -8,7 +8,7 @@ const errors = [];
 
 const EXPECTED_TITLE = "Style Club Prayagraj | Clothing for Men, Women & Kids";
 const EXPECTED_DESCRIPTION =
-  "Explore men’s, women’s and kids’ fashion at Style Club, with stores in Katra, Civil Lines, Naini and Phaphamau in Prayagraj, plus Bharwari in Kaushambi.";
+  "Explore men’s, women’s and kids’ fashion at Style Club, with stores in Katra, Naini and Phaphamau in Prayagraj, plus Bharwari in Kaushambi. Civil Lines is coming soon.";
 
 const EXPECTED_ROUTES = [
   "/",
@@ -21,8 +21,8 @@ const EXPECTED_ROUTES = [
 
 const INTERNAL_APP_ROUTES = new Set(["/_global-error"]);
 
-const STORE_IDS = ["katra", "civil-lines", "naini", "phaphamau", "bharwari"];
-const STORE_NAMES = ["Katra", "Civil Lines", "Naini", "Phaphamau", "Bharwari"];
+const STORE_IDS = ["katra", "naini", "phaphamau", "bharwari"];
+const STORE_NAMES = ["Katra", "Naini", "Phaphamau", "Bharwari"];
 
 const CRITICAL_ASSETS = [
   "public/og.jpg",
@@ -112,8 +112,8 @@ function validateJsonLd(jsonLd, label) {
   if (!findType("WebPage")) fail(`${label}: WebPage entity is missing.`);
 
   const stores = graph.filter((node) => schemaTypes(node).has("ClothingStore"));
-  if (stores.length !== 5) {
-    fail(`${label}: expected 5 ClothingStore entities, found ${stores.length}.`);
+  if (stores.length !== STORE_NAMES.length) {
+    fail(`${label}: expected ${STORE_NAMES.length} ClothingStore entities, found ${stores.length}.`);
   }
 
   const ids = new Set();
