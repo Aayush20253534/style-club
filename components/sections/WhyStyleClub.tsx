@@ -37,7 +37,7 @@ export default function WhyStyleClub() {
     >
       <div className="container-x">
         <Reveal>
-          <p className="eyebrow text-white/65">05 — Why Style Club</p>
+          <p className="eyebrow text-white/65">06 — Why Style Club</p>
         </Reveal>
         <h2 id="why-title" className="mt-6 max-w-[15ch] font-serif text-[11vw] leading-[0.98] md:text-[clamp(3.5rem,6.4vw,7rem)]">
           <MaskLines

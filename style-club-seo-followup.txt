@@ -18,6 +18,14 @@ Completed:
 - Civil Lines correctly excluded from live ClothingStore schema while marked Coming Soon
 - Local on-page SEO strengthened for Prayagraj, Katra, Naini, Phaphamau and Bharwari
 - Release verification / live SEO checks configured
+- Four crawlable store pages and three department pages with unique metadata, canonicals, local/internal links and sitemap entries are prepared in the local SEO patch
+- Naini address updated from Style Club's published grand-opening announcement: Mewa Lal Baghiya, Mirzapur Road, Naini, Prayagraj 211008
+
+DEPLOYMENT NOTE
+===============
+The local SEO pages are not live until this patch is applied, built and deployed.
+The site's existing mystery-gift work is uncommitted; keep those changes when applying or committing the SEO patch.
+After deployment, run npm run release:check:live with RELEASE_URL=https://www.styleclub.fashion and inspect all seven new URLs in Search Console.
 
 REQUIRED FOLLOW-UP
 ==================
@@ -48,7 +56,9 @@ Do NOT create/activate Civil Lines until that location is actually operating.
 
 Important:
 Verify exact branch addresses with the client before changing website/Google data.
-In particular, Naini and Bharwari currently do not have fully verified address details in the website data.
+In particular, Bharwari still lacks a confirmed street address and PIN for the actual shop.
+The Phaphamau shop number and Naini entrance/map pin have not been independently confirmed.
+All open branches are marked daily until 10:30 PM based on the client's statement that hours match Katra; confirm the morning opening time and any holiday exceptions before adding exact openingHoursSpecification schema.
 
 After profiles are active:
 - Keep Name / Address / Phone consistent between Google and website
@@ -74,7 +84,7 @@ Also add the same canonical website URL to any genuine official:
 Only use accounts that actually belong to Style Club.
 
 BrandSpace:
-- Add/confirm a portfolio backlink from the Style Club project to:
+- A contextual Style Club project link has been prepared on BrandSpace's web-development/SEO service page; deploy its separate patch, then confirm the live backlink to:
   https://www.styleclub.fashion/
 - Use natural anchor text such as:
   Style Club
@@ -150,7 +160,7 @@ FINAL PRIORITY ORDER
 3. Search Console monitoring once enough data exists
 4. Optional citation platforms only if useful
 
-No major additional code-side SEO work is currently required unless:
+Further code-side SEO work should be driven by verified details and Search Console evidence. Update the local pages when:
 - branch details change,
 - Civil Lines opens,
 - exact store addresses/phones/hours are provided,

@@ -30,7 +30,7 @@ export default function Footer() {
                       </span>
                     </span>
                   ) : (
-                    <a href={s.mapUrl} target="_blank" rel="noreferrer" className="link-draw text-paper/80 hover:text-white">
+                    <a href={`/stores/${s.id}`} className="link-draw text-paper/80 hover:text-white">
                       {s.name}
                     </a>
                   )}
@@ -70,10 +70,12 @@ export default function Footer() {
             </a>
           </p>
           <nav aria-label="Explore Style Club" className="flex flex-wrap gap-x-3 gap-y-1">
-            <a href="#new-arrivals" className="link-draw hover:text-paper">New arrivals</a>
-            <a href="#departments" className="link-draw hover:text-paper">Men · Women · Kids</a>
-            <a href="#trending" className="link-draw hover:text-paper">Trending</a>
-            <a href="#stores" className="link-draw hover:text-paper">Stores</a>
+            <a href="/#new-arrivals" className="link-draw hover:text-paper">New arrivals</a>
+            <a href="/collections/women" className="link-draw hover:text-paper">Women</a>
+            <a href="/collections/men" className="link-draw hover:text-paper">Men</a>
+            <a href="/collections/kids" className="link-draw hover:text-paper">Kids</a>
+            <a href="/#trending" className="link-draw hover:text-paper">Trending</a>
+            <a href="/#stores" className="link-draw hover:text-paper">Stores</a>
           </nav>
         </div>
       </div>

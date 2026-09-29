@@ -26,9 +26,10 @@ const STORE_ADDRESSES: Record<string, PostalAddressInput> = {
     addressRegion: "Uttar Pradesh",
   },
   naini: {
-    streetAddress: "Mewalal Ki Bagiya, Naini",
+    streetAddress: "Mewa Lal Baghiya, Mirzapur Road, Naini",
     addressLocality: "Prayagraj",
     addressRegion: "Uttar Pradesh",
+    postalCode: "211008",
   },
   phaphamau: {
     streetAddress: "Banaras Road, near Phaphamau Bazar",
@@ -70,7 +71,7 @@ export function buildSiteJsonLd(siteUrl: string) {
       "@type": "ClothingStore",
       "@id": `${siteUrl}/#store-${store.id}`,
       name: `Style Club ${store.name}`,
-      url: `${siteUrl}/#stores`,
+      url: `${siteUrl}/stores/${store.id}`,
       parentOrganization: { "@id": organizationId },
       description:
         `Style Club ${store.name} is a clothing store in ${locality} for men’s, women’s and kidswear, including ethnic wear, denim, everyday fashion, footwear and accessories.`,

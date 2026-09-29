@@ -23,7 +23,7 @@ export default function NewArrivals() {
         <div className="grid grid-cols-1 gap-10 md:grid-cols-12 md:items-end">
           <div className="min-w-0 md:col-span-7">
             <Reveal>
-              <p className="eyebrow text-mute">01 — Just landed</p>
+              <p className="eyebrow text-mute">02 — Just landed</p>
             </Reveal>
             <h2 id="new-arrivals-title" className="display mt-5 text-[17vw] md:text-[clamp(5rem,9vw,9.5rem)]">
               <MaskLines lines={["New", "Arrivals"]} />

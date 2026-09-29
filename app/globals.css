@@ -224,3 +224,148 @@ html.lenis body {
 [data-paused] .cue-line {
   animation-play-state: paused;
 }
+
+/* Gift offer cards with transparent render fallbacks and individual glow. */
+.gift-card {
+  background: radial-gradient(ellipse at 50% 42%, var(--gift-glow), transparent 65%), #111b36;
+  --gift-glow: rgb(64 100 255 / 0.27);
+}
+.gift-card--copper {
+  --gift-glow: rgb(225 119 55 / 0.22);
+}
+.gift-card--plum {
+  --gift-glow: rgb(179 91 178 / 0.22);
+}
+.gift-card--champagne {
+  --gift-glow: rgb(232 191 117 / 0.22);
+}
+
+/* Keep the detailed artwork visible by default; WebGL is an explicit choice. */
+.gift-depth {
+  position: relative;
+  z-index: 2;
+  display: block;
+  width: 100%;
+  transform: perspective(720px) rotateX(var(--gift-turn-x, 0deg)) rotateY(var(--gift-turn-y, 0deg));
+  transform-style: preserve-3d;
+  transition: transform 280ms cubic-bezier(.2, .8, .2, 1), opacity 300ms ease;
+  will-change: transform;
+}
+.gift-float {
+  display: flex;
+  justify-content: center;
+  animation: gift-float 4.5s ease-in-out infinite;
+}
+.gift-illustration {
+  width: min(100%, 270px);
+  height: 240px;
+  object-fit: contain;
+  filter: drop-shadow(0 20px 15px rgb(0 0 0 / 0.3));
+}
+[data-3d-ready] .gift-depth {
+  opacity: 0;
+}
+[data-3d-ready] .gift-float,
+[data-paused] .gift-float {
+  animation-play-state: paused;
+}
+.gift-card:hover .gift-depth,
+.gift-card:focus-visible .gift-depth {
+  transform: perspective(720px) translateY(-7px) rotateX(var(--gift-turn-x, 0deg)) rotateY(var(--gift-turn-y, 0deg)) scale(1.04);
+}
+.gift-card[data-open] .gift-depth {
+  transform: perspective(720px) translateY(-10px) rotateX(var(--gift-turn-x, 0deg)) rotateY(var(--gift-turn-y, 0deg)) scale(1.05);
+}
+.gift-card[data-open] .gift-float {
+  animation: gift-unlock 850ms cubic-bezier(.16, 1, .3, 1) both;
+}
+.gift-halo {
+  position: absolute;
+  inset: 18% 7%;
+  z-index: 0;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, var(--gift-glow), transparent 68%);
+  opacity: .35;
+  transform: scale(.8);
+  filter: blur(10px);
+  transition: opacity 450ms ease, transform 700ms cubic-bezier(.16, 1, .3, 1);
+}
+.gift-card:hover .gift-halo,
+.gift-card:focus-visible .gift-halo,
+.gift-card[data-open] .gift-halo {
+  opacity: 1;
+  transform: scale(1.25);
+}
+.gift-light-sweep {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  background: linear-gradient(105deg, transparent 24%, rgb(255 245 214 / .16) 47%, transparent 65%);
+  opacity: 0;
+  transform: translateX(-115%);
+  mix-blend-mode: screen;
+}
+.gift-card[data-open] .gift-light-sweep {
+  animation: gift-sweep 900ms ease-out both;
+}
+.gift-spark {
+  position: absolute;
+  z-index: 4;
+  width: 10px;
+  height: 10px;
+  background: #f8dfaa;
+  clip-path: polygon(50% 0, 61% 39%, 100% 50%, 61% 61%, 50% 100%, 39% 61%, 0 50%, 39% 39%);
+  opacity: 0;
+  pointer-events: none;
+}
+.gift-spark--one { left: 19%; top: 27%; --spark-x: -15px; --spark-y: -17px; }
+.gift-spark--two { right: 16%; top: 39%; --spark-x: 20px; --spark-y: -24px; }
+.gift-spark--three { right: 27%; bottom: 18%; --spark-x: 18px; --spark-y: 12px; }
+.gift-card[data-open] .gift-spark {
+  animation: gift-spark 760ms ease-out both;
+}
+.gift-card[data-open] .gift-spark--two { animation-delay: 80ms; }
+.gift-card[data-open] .gift-spark--three { animation-delay: 160ms; }
+.gift-stage::after {
+  content: "";
+  position: absolute;
+  bottom: 10%;
+  width: 140px;
+  height: 24px;
+  border-radius: 50%;
+  background: rgb(0 0 0 / 0.25);
+  filter: blur(12px);
+}
+@keyframes gift-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-7px); }
+}
+@keyframes gift-unlock {
+  0% { transform: translateY(0) rotateZ(0) scale(1); }
+  18% { transform: translateY(5px) rotateZ(-2deg) scale(.98); }
+  48% { transform: translateY(-17px) rotateZ(2deg) scale(1.07); }
+  75% { transform: translateY(-6px) rotateZ(-.7deg) scale(1.025); }
+  100% { transform: translateY(-9px) rotateZ(0) scale(1.035); }
+}
+@keyframes gift-sweep {
+  0% { opacity: 0; transform: translateX(-115%); }
+  25% { opacity: 1; }
+  100% { opacity: 0; transform: translateX(115%); }
+}
+@keyframes gift-spark {
+  0% { opacity: 0; transform: translate(0, 0) scale(.4); }
+  38% { opacity: .9; transform: translate(var(--spark-x), var(--spark-y)) scale(1.25); }
+  100% { opacity: 0; transform: translate(var(--spark-x), var(--spark-y)) scale(.5); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .gift-float,
+  .gift-light-sweep,
+  .gift-spark {
+    animation: none;
+  }
+  .gift-depth,
+  .gift-halo {
+    transition-duration: 0.01ms;
+  }
+}

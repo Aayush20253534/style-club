@@ -1,5 +1,7 @@
 # Style Club — Final Domain & SEO Handoff Checklist
 
+> Historical launch checklist for the original single-page site. The current SEO expansion adds four store pages and three department pages; use `style-club-seo-followup.txt` and the updated `release:verify` / `release:check:live` checks for the current route and sitemap expectations. Civil Lines remains coming soon and is not a live ClothingStore entity.
+
 This file is the practical checklist to finish SEO after the client gives you the final domain.
 
 The Style Club codebase already has the technical SEO/security foundation, single-page semantic structure, sitemap, robots.txt, metadata, multi-location structured data, release verification, and production security checks.

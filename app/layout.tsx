@@ -6,7 +6,6 @@ import MotionProvider from "@/components/layout/MotionProvider";
 import Header from "@/components/layout/Header";
 import { BagDrawer, SearchOverlay } from "@/components/layout/Overlays";
 import { getSiteUrl } from "@/lib/site";
-import { buildSiteJsonLd, serializeJsonLd } from "@/lib/structured-data";
 import "./globals.css";
 
 const anton = Anton({ subsets: ["latin"], weight: "400", variable: "--font-anton", display: "swap" });
@@ -29,19 +28,6 @@ export const metadata: Metadata = {
   },
   description:
     "Explore men’s, women’s and kids’ fashion at Style Club, with stores in Katra, Naini and Phaphamau in Prayagraj, plus Bharwari in Kaushambi. Civil Lines is coming soon.",
-  keywords: [
-    "Style Club Prayagraj",
-    "clothing store in Prayagraj",
-    "fashion store Prayagraj",
-    "men’s clothing Prayagraj",
-    "women’s clothing Prayagraj",
-    "kidswear Prayagraj",
-    "Style Club Katra",
-    "Style Club Civil Lines",
-    "Style Club Naini",
-    "Style Club Phaphamau",
-    "Style Club Bharwari",
-  ],
   alternates: { canonical: SITE_URL },
   openGraph: {
     type: "website",
@@ -77,32 +63,10 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
-const jsonLd = buildSiteJsonLd(SITE_URL);
-
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en-IN" className={`${anton.variable} ${instrument.variable} ${inter.variable}`}>
-      <head>
-        {/* First frame of the scroll film — the hero's initial paint. */}
-        <link
-          rel="preload"
-          as="image"
-          type="image/webp"
-          href="/sequence/desktop/f_001.webp"
-          media="(orientation: landscape), (min-width: 820px)"
-          fetchPriority="high"
-        />
-        <link
-          rel="preload"
-          as="image"
-          type="image/webp"
-          href="/sequence/mobile/f_001.webp"
-          media="(orientation: portrait) and (max-width: 819px)"
-          fetchPriority="high"
-        />
-      </head>
       <body className="grain">
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(jsonLd) }} />
         <MotionProvider>
         <ShopProvider>
           <SmoothScroll />

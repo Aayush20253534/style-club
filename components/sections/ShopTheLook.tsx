@@ -72,7 +72,7 @@ export default function ShopTheLook() {
 
         <div className="flex min-w-0 flex-col justify-center lg:col-span-6 xl:col-span-6 xl:col-start-7">
           <Reveal>
-            <p className="eyebrow text-mute">04 — Shop the look</p>
+            <p className="eyebrow text-mute">05 — Shop the look</p>
           </Reveal>
           <h2 id="look-title" className="display mt-5 text-[14vw] md:text-[clamp(4.5rem,7vw,7.5rem)]">
             <MaskLines lines={["Denim,", "done easy."]} />

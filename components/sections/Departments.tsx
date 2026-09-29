@@ -5,8 +5,6 @@ import { motion, useReducedMotion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import RemoteImage from "@/components/ui/RemoteImage";
 import { MaskLines, Reveal } from "@/components/ui/Reveal";
-import { useShop } from "@/components/layout/ShopProvider";
-import { scrollToTarget } from "@/components/layout/SmoothScroll";
 import { departments } from "@/lib/data";
 import { useParallax } from "@/components/ui/useParallax";
 
@@ -21,7 +19,7 @@ export default function Departments() {
         <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
           <div>
             <Reveal>
-              <p className="eyebrow text-paper/55">02 — Men’s · Women’s · Kidswear</p>
+              <p className="eyebrow text-paper/55">03 — Men’s · Women’s · Kidswear</p>
             </Reveal>
             <h2 id="departments-title" className="display mt-5 text-[14vw] md:text-[clamp(4.5rem,7.6vw,8rem)]">
               <MaskLines lines={["One store,", "the whole family."]} />
@@ -46,21 +44,16 @@ export default function Departments() {
 }
 
 function Panel({ dept, index }: { dept: (typeof departments)[number]; index: number }) {
-  const ref = useRef<HTMLButtonElement>(null);
+  const ref = useRef<HTMLAnchorElement>(null);
   const imageRef = useRef<HTMLDivElement>(null);
   const reduce = useReducedMotion();
-  const { setFilter } = useShop();
   useParallax(imageRef, ref, -6, 6);
 
   return (
-    <motion.button
+    <motion.a
       ref={ref}
-      type="button"
-      onClick={() => {
-        setFilter(dept.id);
-        scrollToTarget("#new-arrivals", -72);
-      }}
-      aria-label={`Shop ${dept.title} — see new arrivals`}
+      href={`/collections/${dept.id}`}
+      aria-label={`Explore ${dept.title} clothing`}
       initial={{ clipPath: "inset(100% 0% 0% 0%)" }}
       whileInView={{ clipPath: "inset(0% 0% 0% 0%)" }}
       viewport={{ once: true, margin: "0px 0px -12% 0px" }}
@@ -87,6 +80,6 @@ function Panel({ dept, index }: { dept: (typeof departments)[number]; index: num
           <ArrowUpRight className="size-5" aria-hidden />
         </span>
       </div>
-    </motion.button>
+    </motion.a>
   );
 }

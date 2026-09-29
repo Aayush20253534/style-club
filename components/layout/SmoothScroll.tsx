@@ -17,7 +17,12 @@ export const getLenis = () => lenis;
 /** Scroll to an element or selector, through Lenis when it is running. */
 export function scrollToTarget(target: string | HTMLElement, offset = 0) {
   const el = typeof target === "string" ? document.querySelector<HTMLElement>(target) : target;
-  if (!el) return;
+  if (!el) {
+    if (typeof target === "string" && target.startsWith("#")) {
+      window.location.assign(`/${target}`);
+    }
+    return;
+  }
   if (lenis) {
     lenis.scrollTo(el, { offset, duration: 1.6 });
     return;

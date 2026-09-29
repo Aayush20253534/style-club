@@ -9,9 +9,12 @@ const errors = [];
 const EXPECTED_TITLE = "Style Club Prayagraj | Clothing for Men, Women & Kids";
 const EXPECTED_DESCRIPTION =
   "Explore men’s, women’s and kids’ fashion at Style Club, with stores in Katra, Naini and Phaphamau in Prayagraj, plus Bharwari in Kaushambi. Civil Lines is coming soon.";
+const EXPECTED_ORIGIN = process.env.SITE_URL ?? process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.styleclub.fashion";
 
 const EXPECTED_ROUTES = [
   "/",
+  "/stores/[slug]",
+  "/collections/[category]",
   "/_not-found",
   "/apple-icon",
   "/icon",
@@ -23,6 +26,15 @@ const INTERNAL_APP_ROUTES = new Set(["/_global-error"]);
 
 const STORE_IDS = ["katra", "naini", "phaphamau", "bharwari"];
 const STORE_NAMES = ["Katra", "Naini", "Phaphamau", "Bharwari"];
+const SEO_PAGES = [
+  ["/stores/katra", "Style Club Katra | Clothing Store in Old Katra, Prayagraj"],
+  ["/stores/naini", "Style Club Naini | Clothing Store on Mirzapur Road"],
+  ["/stores/phaphamau", "Style Club Phaphamau | Clothing Store on Banaras Road"],
+  ["/stores/bharwari", "Style Club Bharwari | Clothing Store in Kaushambi"],
+  ["/collections/women", "Women's Clothing in Prayagraj | Style Club"],
+  ["/collections/men", "Men's Clothing in Prayagraj | Style Club"],
+  ["/collections/kids", "Kidswear in Prayagraj | Style Club"],
+];
 
 const CRITICAL_ASSETS = [
   "public/og.jpg",
@@ -77,15 +89,15 @@ function decodeHtmlText(value) {
     .replace(/&gt;/g, ">");
 }
 
-function assertRenderedTitle(html, label) {
+function assertRenderedTitle(html, label, expectedTitle = EXPECTED_TITLE) {
   const match = html.match(/<title>([\s\S]*?)<\/title>/i);
   if (!match) {
     fail(`${label} is missing <title>.`);
     return;
   }
   const actual = decodeHtmlText(match[1].trim());
-  if (actual !== EXPECTED_TITLE) {
-    fail(`${label} title mismatch. Expected "${EXPECTED_TITLE}", found "${actual}".`);
+  if (actual !== expectedTitle) {
+    fail(`${label} title mismatch. Expected "${expectedTitle}", found "${actual}".`);
   }
 }
 
@@ -180,8 +192,9 @@ function checkSource() {
   }
 
   const pageFiles = walk("app").filter((file) => file.endsWith("/page.tsx") || file === "app/page.tsx");
-  if (pageFiles.length !== 1 || pageFiles[0] !== "app/page.tsx") {
-    fail(`Single-page contract violated. Found page routes: ${pageFiles.join(", ") || "none"}.`);
+  const expectedPageFiles = ["app/page.tsx", "app/stores/[slug]/page.tsx", "app/collections/[category]/page.tsx"];
+  if (pageFiles.length !== expectedPageFiles.length || expectedPageFiles.some((file) => !pageFiles.includes(file))) {
+    fail(`SEO page routes mismatch. Found page routes: ${pageFiles.join(", ") || "none"}.`);
   }
 
   const desktopFrames = fileExists("public/sequence/desktop")
@@ -207,8 +220,6 @@ function checkSource() {
     assertIncludes(layout, 'follow: true', "app/layout.tsx");
     assertIncludes(layout, 'openGraph:', "app/layout.tsx");
     assertIncludes(layout, 'twitter:', "app/layout.tsx");
-    assertIncludes(layout, "buildSiteJsonLd(SITE_URL)", "app/layout.tsx");
-    assertIncludes(layout, "serializeJsonLd(jsonLd)", "app/layout.tsx");
   }
 
   if (fileExists("app/robots.ts")) {
@@ -221,9 +232,8 @@ function checkSource() {
   if (fileExists("app/sitemap.ts")) {
     const sitemap = read("app/sitemap.ts");
     assertIncludes(sitemap, "url: base", "app/sitemap.ts");
-    if (/\/(?:men|women|kids|stores|about|contact)\b/.test(sitemap)) {
-      fail("app/sitemap.ts must remain homepage-only for the single-page site.");
-    }
+    assertIncludes(sitemap, "/stores/${store.id}", "app/sitemap.ts");
+    assertIncludes(sitemap, "/collections/${department.id}", "app/sitemap.ts");
   }
 
   if (fileExists("lib/structured-data.ts")) {
@@ -261,6 +271,7 @@ function checkSource() {
     assertIncludes(page, "<ShopTheLook />", "app/page.tsx");
     assertIncludes(page, "<WhyStyleClub />", "app/page.tsx");
     assertIncludes(page, "<Stores />", "app/page.tsx");
+    assertIncludes(page, "buildSiteJsonLd(getSiteUrl())", "app/page.tsx");
   }
 
   finish("Source release checks");
@@ -329,6 +340,25 @@ function checkDistOutput() {
     } else {
       validateJsonLd(jsonLdScripts[0], "rendered homepage");
     }
+  }
+
+  for (const [route, title] of SEO_PAGES) {
+    const file = `.next/server/app${route}.html`;
+    if (!fileExists(file)) {
+      fail(`SEO page is not prerendered: ${route}.`);
+      continue;
+    }
+    const html = read(file);
+    assertRenderedTitle(html, route, title);
+    if (canonicalFromHtml(html) !== `${EXPECTED_ORIGIN}${route}`) {
+      fail(`${route}: canonical does not match its URL.`);
+    }
+    if (!/<h1\b/i.test(html)) fail(`${route}: missing H1.`);
+    if (/<meta[^>]+name=["']robots["'][^>]+content=["'][^"']*noindex/i.test(html)) fail(`${route}: accidentally noindexed.`);
+    const scripts = extractJsonLd(html);
+    if (!scripts.length) fail(`${route}: missing structured data.`);
+    if (route.startsWith("/stores/") && !html.includes("Get directions")) fail(`${route}: missing store directions.`);
+    if (route.startsWith("/collections/") && !html.includes("Featured styles")) fail(`${route}: missing collection content.`);
   }
 
   finish("Built release checks");
@@ -445,9 +475,22 @@ async function checkLiveSite() {
     if (!sitemapResponse.ok) fail(`/sitemap.xml returned HTTP ${sitemapResponse.status}.`);
     const sitemap = await sitemapResponse.text();
     const locations = [...sitemap.matchAll(/<loc>(.*?)<\/loc>/gi)].map((match) => match[1]);
-    if (locations.length !== 1 || new URL(locations[0]).origin !== origin || new URL(locations[0]).pathname !== "/") {
-      fail(`Sitemap must contain only the homepage; found ${locations.join(", ") || "no URLs"}.`);
+    const expectedLocations = ["/", ...SEO_PAGES.map(([route]) => route)].map((route) => `${origin}${route === "/" ? "" : route}`);
+    if (locations.length !== expectedLocations.length || expectedLocations.some((url) => !locations.includes(url))) {
+      fail(`Sitemap is missing expected SEO pages; found ${locations.join(", ") || "no URLs"}.`);
     }
+  }
+
+  for (const [route, title] of SEO_PAGES) {
+    const response = await fetchChecked(`${origin}${route}`);
+    if (!response) continue;
+    if (!response.ok) {
+      fail(`${route} returned HTTP ${response.status}.`);
+      continue;
+    }
+    const page = await response.text();
+    assertRenderedTitle(page, `live ${route}`, title);
+    if (canonicalFromHtml(page) !== `${origin}${route}`) fail(`${route} has the wrong live canonical.`);
   }
 
   for (const asset of [

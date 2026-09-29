@@ -59,7 +59,7 @@ export default function Stores() {
 
           <div className="min-w-0 lg:col-span-5">
             <Reveal>
-              <p className="eyebrow text-mute">06 — Visit us</p>
+              <p className="eyebrow text-mute">07 — Visit us</p>
             </Reveal>
             <h2 id="stores-title" className="display mt-5 text-[14vw] md:text-[clamp(4.5rem,6.6vw,7rem)]">
               <MaskLines lines={["Come", "try it on."]} />
@@ -96,15 +96,12 @@ export default function Stores() {
                         </span>
                       </div>
                     ) : (
-                      <a
-                        href={s.mapUrl}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="group grid grid-cols-[1fr_auto] items-start gap-4 border-b border-line py-5"
-                      >
+                      <div className="group grid grid-cols-[1fr_auto] items-start gap-4 border-b border-line py-5">
                         <div>
                           <h3 className="flex items-center gap-3">
-                            <span className="display text-[28px] leading-none">{s.name}</span>
+                            <a href={`/stores/${s.id}`} className="link-draw" aria-label={`Explore Style Club ${s.name} store details`}>
+                              <span className="display text-[28px] leading-none">{s.name}</span>
+                            </a>
                             {s.flagship && (
                               <span className="eyebrow bg-royal px-2 py-1 text-[9px] tracking-[0.22em] text-white">Flagship</span>
                             )}
@@ -119,12 +116,12 @@ export default function Stores() {
                             </p>
                           )}
                         </div>
-                        <span className="eyebrow mt-1 flex items-center gap-1 text-[10px] text-char transition-colors group-hover:text-royal">
+                        <a href={s.mapUrl} target="_blank" rel="noopener noreferrer" className="eyebrow mt-1 flex items-center gap-1 text-[10px] text-char transition-colors group-hover:text-royal">
                           Directions
                           <ArrowUpRight className="size-3.5 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden />
                           <span className="sr-only">to Style Club {s.name} (opens Google Maps)</span>
-                        </span>
-                      </a>
+                        </a>
+                      </div>
                     )}
                   </Reveal>
                 </li>

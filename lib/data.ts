@@ -312,8 +312,9 @@ export const stores: Store[] = [
     id: "naini",
     name: "Naini",
     area: "Prayagraj",
-    address: "Mewalal Ki Bagiya, Naini, Prayagraj",
+    address: "Mewa Lal Baghiya, Mirzapur Road, Naini, Prayagraj, UP 211008",
     mapUrl: mapsSearch("Style Club Mewalal Ki Bagiya Naini Prayagraj"),
+    hours: "Open daily · until 10:30 PM",
   },
   {
     id: "phaphamau",
@@ -321,6 +322,7 @@ export const stores: Store[] = [
     area: "Prayagraj",
     address: "Banaras Road, near Phaphamau Bazar, UP 211013",
     mapUrl: "https://maps.app.goo.gl/zvzU9fui7HKzYyfL9",
+    hours: "Open daily · until 10:30 PM",
   },
   {
     id: "bharwari",
@@ -328,6 +330,7 @@ export const stores: Store[] = [
     area: "Kaushambi",
     address: "Bharwari, Uttar Pradesh",
     mapUrl: mapsSearch("Style Club Bharwari"),
+    hours: "Open daily · until 10:30 PM",
   },
 ];
 
@@ -343,5 +346,4 @@ export const allProducts: Product[] = [
   ...newArrivals,
   ...trending.filter((t) => !newArrivals.some((n) => n.id === t.id)),
 ];
-
 

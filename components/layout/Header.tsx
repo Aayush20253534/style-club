@@ -3,25 +3,26 @@
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Heart, Search, ShoppingBag, X } from "lucide-react";
+import { usePathname } from "next/navigation";
 import Logo from "./Logo";
 import { useShop } from "./ShopProvider";
 import { getLenis, scrollToTarget } from "./SmoothScroll";
-import type { Category } from "@/lib/data";
 import { contact, stores } from "@/lib/data";
 
-type NavItem = { label: string; target: string; filter?: Category | "all" };
+type NavItem = { label: string; target: string };
 
 const NAV: NavItem[] = [
-  { label: "New In", target: "#new-arrivals", filter: "all" },
-  { label: "Women", target: "#new-arrivals", filter: "women" },
-  { label: "Men", target: "#new-arrivals", filter: "men" },
-  { label: "Kids", target: "#new-arrivals", filter: "kids" },
-  { label: "Trending", target: "#trending" },
-  { label: "Stores", target: "#stores" },
+  { label: "New In", target: "/#new-arrivals" },
+  { label: "Women", target: "/collections/women" },
+  { label: "Men", target: "/collections/men" },
+  { label: "Kids", target: "/collections/kids" },
+  { label: "Trending", target: "/#trending" },
+  { label: "Stores", target: "/#stores" },
 ];
 
 export default function Header() {
-  const { bagCount, wishlist, setBagOpen, setSearchOpen, setFilter } = useShop();
+  const { bagCount, wishlist, setBagOpen, setSearchOpen } = useShop();
+  const pathname = usePathname();
   const [onDark, setOnDark] = useState(true);
   const [hidden, setHidden] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -60,11 +61,14 @@ export default function Header() {
   }, [menuOpen]);
 
   const go = (item: NavItem) => {
-    if (item.filter) setFilter(item.filter);
     setMenuOpen(false);
-    const offset = item.target === "#stores" ? 0 : -72;
-    // Let the drawer release the scroll lock before travelling.
-    requestAnimationFrame(() => scrollToTarget(item.target, offset));
+    const anchor = item.target.startsWith("/#") ? item.target.slice(1) : null;
+    if (pathname === "/" && anchor) {
+      const offset = anchor === "#stores" ? 0 : -72;
+      requestAnimationFrame(() => scrollToTarget(anchor, offset));
+    } else {
+      window.location.assign(item.target);
+    }
   };
 
   const dark = onDark && !menuOpen;
@@ -87,12 +91,14 @@ export default function Header() {
       >
         <div className="container-x flex h-16 items-center justify-between gap-6 md:h-[72px]">
           <a
-            href="#top"
+            href="/"
             onClick={(e) => {
-              e.preventDefault();
-              scrollToTarget("#top");
+              if (pathname === "/") {
+                e.preventDefault();
+                scrollToTarget("#top");
+              }
             }}
-            aria-label="Style Club — back to top"
+            aria-label="Style Club — home"
             className="shrink-0"
           >
             <Logo />
@@ -105,8 +111,10 @@ export default function Header() {
                   <a
                     href={item.target}
                     onClick={(event) => {
-                      event.preventDefault();
-                      go(item);
+                      if (pathname === "/" && item.target.startsWith("/#")) {
+                        event.preventDefault();
+                        go(item);
+                      } else setMenuOpen(false);
                     }}
                     className="link-draw pb-1 text-[12px] font-semibold uppercase tracking-[0.2em]"
                   >
@@ -176,8 +184,10 @@ export default function Header() {
                     <a
                       href={item.target}
                       onClick={(event) => {
-                        event.preventDefault();
-                        go(item);
+                        if (pathname === "/" && item.target.startsWith("/#")) {
+                          event.preventDefault();
+                          go(item);
+                        } else setMenuOpen(false);
                       }}
                       className="display flex w-full items-baseline justify-between py-4 text-left text-[44px]"
                     >
