@@ -59,7 +59,7 @@ export default function Stores() {
 
           <div className="min-w-0 lg:col-span-5">
             <Reveal>
-              <p className="eyebrow text-mute">07 — Visit us</p>
+              <p className="eyebrow text-mute">08 — Visit us</p>
             </Reveal>
             <h2 id="stores-title" className="display mt-5 text-[14vw] md:text-[clamp(4.5rem,6.6vw,7rem)]">
               <MaskLines lines={["Come", "try it on."]} />

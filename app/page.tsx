@@ -4,6 +4,7 @@ import Departments from "@/components/sections/Departments";
 import Trending from "@/components/sections/Trending";
 import GiftOffers from "@/components/sections/GiftOffers";
 import ShopTheLook from "@/components/sections/ShopTheLook";
+import CatalogEdit from "@/components/sections/CatalogEdit";
 import WhyStyleClub from "@/components/sections/WhyStyleClub";
 import Stores from "@/components/sections/Stores";
 import Footer from "@/components/layout/Footer";
@@ -26,6 +27,7 @@ export default function Home() {
           <Departments />
           <Trending />
           <ShopTheLook />
+          <CatalogEdit />
           <WhyStyleClub />
           <Stores />
         </div>

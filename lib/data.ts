@@ -4,12 +4,15 @@ export type Product = {
   id: string;
   name: string;
   category: Category;
-  /** Unsplash photo path, e.g. "photo-1555583743-991174c11425" */
+  /** Unsplash photo ID or a local path in public/. */
   image: string;
   alt: string;
   /** object-position for the card crop */
   pos?: string;
   colors: string[];
+  /** Lowest listed price for this style category, not the price of the pictured item. */
+  fromPrice?: number;
+  groupId?: string;
 };
 
 export const CATEGORY_LABEL: Record<Category, string> = {
@@ -342,8 +345,98 @@ export const contact = {
   },
 };
 
+type CatalogGroup = {
+  id: string;
+  title: string;
+  summary: string;
+  category: Exclude<Category, "accessories">;
+  products: Product[];
+};
+
+type CatalogEntry = [id: string, name: string, file: string, alt: string, fromPrice: number, color: string];
+
+function catalogGroup(
+  id: string,
+  title: string,
+  summary: string,
+  category: CatalogGroup["category"],
+  folder: string,
+  entries: CatalogEntry[],
+): CatalogGroup {
+  return {
+    id,
+    title,
+    summary,
+    category,
+    products: entries.map(([productId, name, file, alt, fromPrice, color]) => ({
+      id: productId,
+      name,
+      category,
+      image: `/${folder}/${file}`,
+      alt,
+      colors: [color],
+      fromPrice,
+      groupId: id,
+    })),
+  };
+}
+
+/** Illustrative looks. Starting prices are category minima from the supplied price list. */
+export const catalogGroups: CatalogGroup[] = [
+  catalogGroup("ladies-ethnic", "Ladies Ethnic", "Suits, kurti sets and occasion wear.", "women", "Ladies_ethnic", [
+    ["le-salwar", "Salwar Suits", "01_salwar_suit.png", "Model in a teal embroidered salwar suit", 500, "#176074"],
+    ["le-palazzo", "Kurti Palazzo Sets", "02_kurti_palazzo_set.png", "Model in a terracotta kurti and ivory palazzo set", 400, "#a95840"],
+    ["le-long-kurti", "Long Kurtis", "03_long_kurti.png", "Model in an indigo printed long kurti", 250, "#273f69"],
+    ["le-coord", "Ethnic Co-ord Sets", "04_ethnic_coord_set.png", "Model in an olive ethnic co-ord set", 500, "#75805c"],
+    ["le-gown", "Ethnic Gowns", "05_ethnic_gown.png", "Model in a plum embroidered gown", 600, "#64314f"],
+  ]),
+  catalogGroup("ladies-western", "Ladies Western", "Tops, shirts and everyday denim.", "women", "Ladies_western", [
+    ["lw-knit-top", "Knitted Tops", "01_knitted_top.png", "Model in a lavender knitted top", 60, "#aa8da7"],
+    ["lw-woven-top", "Woven Tops", "02_woven_top.png", "Model in a cobalt woven top", 300, "#2854b0"],
+    ["lw-formal-shirt", "Formal Shirts", "03_formal_shirt.png", "Model in a pale blue formal shirt", 350, "#bdd1ed"],
+    ["lw-casual-shirt", "Casual Shirts", "04_casual_shirt.png", "Model in a peach striped casual shirt", 250, "#eab4a5"],
+    ["lw-jeans", "Jeans", "05_jeans.png", "Model in dark indigo straight-fit jeans", 400, "#31476b"],
+  ]),
+  catalogGroup("ladies-western-winter", "Ladies Western Winter", "Warm layers for the changing season.", "women", "Ladies_western_winter", [
+    ["lww-cardigan", "Long Cardigans", "01_long_cardigan.png", "Model in a camel long cardigan", 500, "#b58e68"],
+    ["lww-jacket", "Winter Jackets", "02_winter_jacket.png", "Model in a forest green winter jacket", 500, "#264739"],
+    ["lww-sweatshirt", "Heavy Sweatshirts", "03_heavy_sweatshirt.png", "Model in a burgundy heavyweight sweatshirt", 350, "#702839"],
+  ]),
+  catalogGroup("mens", "Men's", "Shirts, kurtas, tees and everyday staples.", "men", "Mens", [
+    ["m-casual-shirt", "Casual Shirts", "01_casual_shirt.png", "Model in a sage casual shirt", 250, "#a3ae8d"],
+    ["m-formal-shirt", "Formal Shirts", "02_formal_shirt.png", "Model in a white formal shirt", 250, "#eeeae2"],
+    ["m-kurta-set", "Kurta Sets", "03_kurta_set.png", "Model in a teal kurta set", 500, "#4c8390"],
+    ["m-oversized-tee", "Oversized T-shirts", "04_oversized_tshirt.png", "Model in a rust oversized T-shirt", 200, "#b66b4d"],
+    ["m-jeans", "Regular-fit Jeans", "05_regular_fit_jeans.png", "Model in regular-fit blue jeans", 600, "#334d76"],
+    ["m-trousers", "Cotton Trousers", "06_cotton_trousers.png", "Model in sand-coloured cotton trousers", 500, "#cdbba0"],
+  ]),
+  catalogGroup("mens-winter", "Men's Winter", "Jackets, sweaters and sweatshirts.", "men", "Mens_winter", [
+    ["mw-jacket", "Winter Jackets", "01_winter_jacket.png", "Model in a navy winter jacket", 300, "#273554"],
+    ["mw-sweater", "Full-sleeve Sweaters", "02_winter_sweater.png", "Model in a brown knit sweater", 250, "#78543d"],
+    ["mw-sweatshirt", "Full-sleeve Sweatshirts", "03_winter_sweatshirt.png", "Model in an olive winter sweatshirt", 250, "#616952"],
+  ]),
+  catalogGroup("infant", "Infant", "Soft outfits and little occasion looks.", "kids", "Infant", [
+    ["i-knit-two-piece", "Knitted Two-piece Sets", "01_knitted_two_piece.png", "Infant in a sage knitted two-piece outfit", 250, "#a5b39b"],
+    ["i-cotton-frock", "Cotton Frocks", "02_cotton_frock.png", "Infant in a pink floral cotton frock", 80, "#e5b7b4"],
+  ]),
+  catalogGroup("infant-winter", "Infant Winter", "Cosy layers for little ones.", "kids", "Infant_winter", [
+    ["iw-woollen-suit", "Woollen Baba Suits", "01_woollen_baba_suit.png", "Infant in a mustard woollen baba suit", 800, "#c69335"],
+    ["iw-jacket", "Infant Winter Jackets", "02_winter_jacket.png", "Infant in a rust padded winter jacket", 300, "#b86b51"],
+  ]),
+  catalogGroup("boys", "Boys", "Easy shirts, tees and play-ready bottoms.", "kids", "Boys", [
+    ["b-shirt", "Long-sleeve Shirts", "01_long_sleeve_shirt.png", "Boy in a pale blue long-sleeve shirt", 250, "#a4c1e6"],
+    ["b-hooded-tee", "Hooded T-shirts", "02_hooded_tshirt.png", "Boy in a teal hooded T-shirt", 200, "#196e7b"],
+    ["b-cargo", "Cargo Joggers", "03_cargo_joggers.png", "Boy in olive cargo joggers", 500, "#72795a"],
+  ]),
+  catalogGroup("girls", "Girls", "Frocks, kurti sets and denim.", "kids", "Girls", [
+    ["g-frock", "Cotton Frocks", "01_cotton_frock.png", "Girl in a blue cotton frock", 200, "#93b6e6"],
+    ["g-kurti", "Kurti Sets", "02_kurti_set.png", "Girl in a coral kurti and palazzo set", 350, "#d77764"],
+    ["g-skirt", "Denim Skirts", "03_denim_skirt.png", "Girl in a denim skirt", 300, "#5276a7"],
+  ]),
+];
+
 export const allProducts: Product[] = [
   ...newArrivals,
   ...trending.filter((t) => !newArrivals.some((n) => n.id === t.id)),
+  ...catalogGroups.flatMap((group) => group.products),
 ];
-

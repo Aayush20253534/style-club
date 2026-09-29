@@ -6,5 +6,8 @@ import { unsplashLoader, unsplashSrc } from "@/lib/unsplash";
 type Props = Omit<ImageProps, "src" | "loader"> & { photo: string };
 
 export default function RemoteImage({ photo, alt, quality = 70, ...rest }: Props) {
+  if (photo.startsWith("/")) {
+    return <Image {...rest} alt={alt} quality={quality} src={photo} />;
+  }
   return <Image {...rest} alt={alt} quality={quality} loader={unsplashLoader} src={unsplashSrc(photo)} />;
 }

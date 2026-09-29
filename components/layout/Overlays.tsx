@@ -1,12 +1,13 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { ArrowRight, Heart, Phone, Search, X } from "lucide-react";
 import RemoteImage from "@/components/ui/RemoteImage";
 import { useShop } from "./ShopProvider";
 import { getLenis, scrollToTarget } from "./SmoothScroll";
-import { allProducts, CATEGORY_LABEL, contact, newArrivals } from "@/lib/data";
+import { allProducts, catalogGroups, CATEGORY_LABEL, contact, newArrivals, type Product } from "@/lib/data";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
@@ -194,6 +195,7 @@ const SUGGESTIONS = ["Kurta", "Denim", "Co-ord", "Hoodie", "Kids", "Sneakers"];
 
 export function SearchOverlay() {
   const { searchOpen, setSearchOpen, setFilter } = useShop();
+  const router = useRouter();
   const [q, setQ] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
   const reduce = useReducedMotion();
@@ -212,13 +214,18 @@ export function SearchOverlay() {
     const term = q.trim().toLowerCase();
     if (!term) return [];
     return allProducts
-      .filter((p) => `${p.name} ${CATEGORY_LABEL[p.category]}`.toLowerCase().includes(term))
+      .filter((p) => `${p.name} ${CATEGORY_LABEL[p.category]} ${catalogGroups.find((group) => group.id === p.groupId)?.title ?? ""}`.toLowerCase().includes(term))
       .slice(0, 8);
   }, [q]);
 
-  const open = (id: string, category: (typeof allProducts)[number]["category"]) => {
-    const isNew = newArrivals.some((p) => p.id === id);
-    if (isNew) setFilter(category);
+  const open = (product: Product) => {
+    if (product.groupId) {
+      close();
+      router.push(`/collections/${product.category}#${product.groupId}`);
+      return;
+    }
+    const isNew = newArrivals.some((p) => p.id === product.id);
+    if (isNew) setFilter(product.category);
     close();
     requestAnimationFrame(() => scrollToTarget(isNew ? "#new-arrivals" : "#trending", -72));
   };
@@ -285,7 +292,7 @@ export function SearchOverlay() {
                 <ul className="mt-8 grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-4" aria-live="polite">
                   {results.map((p) => (
                     <li key={p.id}>
-                      <button type="button" onClick={() => open(p.id, p.category)} className="group block w-full text-left">
+                      <button type="button" onClick={() => open(p)} className="group block w-full text-left">
                         <div className="relative aspect-[4/5] overflow-hidden bg-bone">
                           <RemoteImage
                             photo={p.image}
@@ -297,6 +304,7 @@ export function SearchOverlay() {
                           />
                         </div>
                         <p className="mt-2.5 text-[13.5px] font-medium">{p.name}</p>
+                        {p.fromPrice !== undefined && <p className="mt-1 text-[12px] text-mute">Styles from ₹{p.fromPrice.toLocaleString("en-IN")}</p>}
                       </button>
                     </li>
                   ))}

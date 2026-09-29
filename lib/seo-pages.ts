@@ -51,20 +51,20 @@ export const departmentCopy: Record<DepartmentId, {
 }> = {
   women: {
     title: "Women's Clothing in Prayagraj | Style Club",
-    description: "Explore women's clothing at Style Club in Prayagraj (Allahabad): co-ords, kurta sets, dresses and everyday styles. Visit your nearest store.",
-    lead: "Co-ords, kurta sets, dresses and everyday pieces for the way you move.",
-    detail: "From printed sets to occasion-ready looks, explore the women's edit here and try your favourites at a Style Club store in Prayagraj (Allahabad) or Bharwari. Styles shown online are an inspiration; check availability with the store.",
+    description: "Explore women's ethnic, western and winter clothing at Style Club in Prayagraj (Allahabad). Browse styles and starting prices, then visit a store.",
+    lead: "Ethnic wear, western staples and winter layers for the way you move.",
+    detail: "From kurti sets and dresses to denim and warm layers, explore the women's edit here and try your favourites at a Style Club store in Prayagraj (Allahabad) or Bharwari. Images are illustrative; check current prices and availability with the store.",
   },
   men: {
     title: "Men's Clothing in Prayagraj | Style Club",
-    description: "Explore men's clothing at Style Club in Prayagraj (Allahabad): denim, overshirts, kurtas and casual styles. Find a nearby store.",
+    description: "Explore men's shirts, T-shirts, kurtas, denim and winter clothing at Style Club in Prayagraj (Allahabad). See starting prices and store locations.",
     lead: "Denim, overshirts, ethnic styles and easy everyday layers.",
     detail: "Build a look for everyday wear or an occasion with the men's edit. Browse featured styles, then visit a Style Club branch in Prayagraj (Allahabad) or Bharwari to see current options and find the right fit.",
   },
   kids: {
     title: "Kidswear in Prayagraj | Style Club",
-    description: "Explore kids' clothing at Style Club in Prayagraj (Allahabad), from everyday outfits to occasion styles. Visit your nearest store.",
-    lead: "Made for every little plan, from play days to celebrations.",
-    detail: "Explore the kidswear edit for everyday outfits and occasion looks. Visit a Style Club store in Prayagraj (Allahabad) or Bharwari to see available sizes and styles in person.",
+    description: "Explore infant, boys' and girls' clothing at Style Club in Prayagraj (Allahabad), including winter styles. Browse starting prices and store locations.",
+    lead: "Infant, boys' and girls' styles for play days, celebrations and cooler weather.",
+    detail: "Explore the kidswear edit for infant outfits, boys' staples, girls' dresses and winter layers. Visit a Style Club store in Prayagraj (Allahabad) or Bharwari to see current sizes, prices and styles in person.",
   },
 };

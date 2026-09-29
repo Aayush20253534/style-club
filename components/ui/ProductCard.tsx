@@ -78,6 +78,11 @@ export default function ProductCard({
           ))}
         </div>
       </div>
+      {product.fromPrice !== undefined && (
+        <p className="mt-1.5 text-[12px] font-medium text-mute md:text-[13px]">
+          Styles from <span className="font-semibold text-char">₹{product.fromPrice.toLocaleString("en-IN")}</span>
+        </p>
+      )}
     </article>
   );
 }
