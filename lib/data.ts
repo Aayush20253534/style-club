@@ -243,7 +243,7 @@ export const departments = [
     id: "kids" as const,
     title: "Kids",
     kicker: "Everyday · Party · Play",
-    image: "photo-1780504863628-1657131dcffb",
+    image: "/1.png",
     alt: "Smiling young boy in a blue t-shirt",
     pos: "50% 25%",
   },
