@@ -74,6 +74,7 @@ export default function Footer() {
             <a href="/collections/women" className="link-draw hover:text-paper">Women</a>
             <a href="/collections/men" className="link-draw hover:text-paper">Men</a>
             <a href="/collections/kids" className="link-draw hover:text-paper">Kids</a>
+            <a href="/allahabad" className="link-draw hover:text-paper">Allahabad stores</a>
             <a href="/#trending" className="link-draw hover:text-paper">Trending</a>
             <a href="/#stores" className="link-draw hover:text-paper">Stores</a>
           </nav>

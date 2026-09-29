@@ -2,7 +2,7 @@ import { contact, stores } from "@/lib/data";
 
 const PAGE_NAME = "Style Club Prayagraj | Clothing for Men, Women & Kids";
 const PAGE_DESCRIPTION =
-  "Explore men’s, women’s and kids’ fashion at Style Club, with stores in Katra, Naini and Phaphamau in Prayagraj, plus Bharwari in Kaushambi. Civil Lines is coming soon.";
+  "Explore men’s, women’s and kids’ fashion at Style Club, with stores in Katra, Naini and Phaphamau in Prayagraj (Allahabad), plus Bharwari in Kaushambi. Civil Lines is coming soon.";
 
 const phone = (href: string) => href.replace(/^tel:/, "");
 
@@ -65,7 +65,7 @@ export function buildSiteJsonLd(siteUrl: string) {
     const locality =
       store.id === "bharwari"
         ? "Bharwari, Kaushambi"
-        : `${store.name}, Prayagraj`;
+        : `${store.name}, Prayagraj (Allahabad)`;
 
     const node: Record<string, unknown> = {
       "@type": "ClothingStore",
@@ -101,7 +101,7 @@ export function buildSiteJsonLd(siteUrl: string) {
         url: siteUrl,
         telephone: phone(contact.phones[0].href),
         description:
-          "Style Club is a clothing retailer serving Prayagraj and Bharwari with men’s, women’s and kidswear, ethnic wear, denim, footwear and accessories.",
+          "Style Club is a clothing retailer serving Prayagraj (Allahabad) and Bharwari with men’s, women’s and kidswear, ethnic wear, denim, footwear and accessories.",
         sameAs: [contact.instagram.url],
         subOrganization: storeRefs,
       },

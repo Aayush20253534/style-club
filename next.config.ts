@@ -59,6 +59,12 @@ const nextConfig: NextConfig = {
     formats: ["image/avif", "image/webp"],
     qualities: [70, 75, 80],
   },
+  async redirects() {
+    return [
+      { source: "/allahabad/stores/:slug", destination: "/stores/:slug", permanent: true },
+      { source: "/allahabad/collections/:category", destination: "/collections/:category", permanent: true },
+    ];
+  },
   async headers() {
     return [
       {

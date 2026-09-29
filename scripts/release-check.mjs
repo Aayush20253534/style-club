@@ -8,11 +8,12 @@ const errors = [];
 
 const EXPECTED_TITLE = "Style Club Prayagraj | Clothing for Men, Women & Kids";
 const EXPECTED_DESCRIPTION =
-  "Explore men’s, women’s and kids’ fashion at Style Club, with stores in Katra, Naini and Phaphamau in Prayagraj, plus Bharwari in Kaushambi. Civil Lines is coming soon.";
+  "Explore men’s, women’s and kids’ fashion at Style Club, with stores in Katra, Naini and Phaphamau in Prayagraj (Allahabad), plus Bharwari in Kaushambi. Civil Lines is coming soon.";
 const EXPECTED_ORIGIN = process.env.SITE_URL ?? process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.styleclub.fashion";
 
 const EXPECTED_ROUTES = [
   "/",
+  "/allahabad",
   "/stores/[slug]",
   "/collections/[category]",
   "/_not-found",
@@ -27,6 +28,7 @@ const INTERNAL_APP_ROUTES = new Set(["/_global-error"]);
 const STORE_IDS = ["katra", "naini", "phaphamau", "bharwari"];
 const STORE_NAMES = ["Katra", "Naini", "Phaphamau", "Bharwari"];
 const SEO_PAGES = [
+  ["/allahabad", "Clothing Stores in Allahabad (Prayagraj) | Style Club"],
   ["/stores/katra", "Style Club Katra | Clothing Store in Old Katra, Prayagraj"],
   ["/stores/naini", "Style Club Naini | Clothing Store on Mirzapur Road"],
   ["/stores/phaphamau", "Style Club Phaphamau | Clothing Store on Banaras Road"],
@@ -192,7 +194,7 @@ function checkSource() {
   }
 
   const pageFiles = walk("app").filter((file) => file.endsWith("/page.tsx") || file === "app/page.tsx");
-  const expectedPageFiles = ["app/page.tsx", "app/stores/[slug]/page.tsx", "app/collections/[category]/page.tsx"];
+  const expectedPageFiles = ["app/page.tsx", "app/allahabad/page.tsx", "app/stores/[slug]/page.tsx", "app/collections/[category]/page.tsx"];
   if (pageFiles.length !== expectedPageFiles.length || expectedPageFiles.some((file) => !pageFiles.includes(file))) {
     fail(`SEO page routes mismatch. Found page routes: ${pageFiles.join(", ") || "none"}.`);
   }
@@ -232,6 +234,7 @@ function checkSource() {
   if (fileExists("app/sitemap.ts")) {
     const sitemap = read("app/sitemap.ts");
     assertIncludes(sitemap, "url: base", "app/sitemap.ts");
+    assertIncludes(sitemap, "`${base}/allahabad`", "app/sitemap.ts");
     assertIncludes(sitemap, "/stores/${store.id}", "app/sitemap.ts");
     assertIncludes(sitemap, "/collections/${department.id}", "app/sitemap.ts");
   }

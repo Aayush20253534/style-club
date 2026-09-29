@@ -10,6 +10,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "weekly",
       priority: 1,
     },
+    {
+      url: `${base}/allahabad`,
+      changeFrequency: "monthly",
+      priority: 0.8,
+    },
     ...stores.filter((store) => !store.comingSoon).map((store) => ({
       url: `${base}/stores/${store.id}`,
       changeFrequency: "monthly" as const,
