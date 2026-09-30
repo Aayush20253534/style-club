@@ -28,7 +28,9 @@ export const metadata: Metadata = {
   },
   description:
     "Explore men’s, women’s and kids’ fashion at Style Club, with stores in Katra, Naini and Phaphamau in Prayagraj (Allahabad), plus Bharwari in Kaushambi. Civil Lines is coming soon.",
-  alternates: { canonical: SITE_URL },
+  // Child routes provide their own canonicals. Keeping a root canonical here
+  // makes Next.js emit the homepage canonical alongside route metadata.
+  alternates: { canonical: "/" },
   openGraph: {
     type: "website",
     locale: "en_IN",
