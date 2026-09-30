@@ -217,7 +217,7 @@ function checkSource() {
     const layout = read("app/layout.tsx");
     assertIncludes(layout, EXPECTED_TITLE, "app/layout.tsx");
     assertIncludes(layout, EXPECTED_DESCRIPTION, "app/layout.tsx");
-    assertIncludes(layout, "alternates: { canonical: SITE_URL }", "app/layout.tsx");
+    assertIncludes(layout, 'alternates: { canonical: "/" }', "app/layout.tsx");
     assertIncludes(layout, 'index: true', "app/layout.tsx");
     assertIncludes(layout, 'follow: true', "app/layout.tsx");
     assertIncludes(layout, 'openGraph:', "app/layout.tsx");
