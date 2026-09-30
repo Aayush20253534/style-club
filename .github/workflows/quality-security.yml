@@ -18,6 +18,11 @@ jobs:
   verify:
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    env:
+      # One canonical origin for every step. The previous workflow only set
+      # SITE_URL during the build, so dist checks compared that build against
+      # a different fallback origin.
+      SITE_URL: ${{ vars.SITE_URL || 'https://www.styleclub.fashion' }}
 
     steps:
       - name: Checkout
@@ -47,8 +52,6 @@ jobs:
         run: npm run typecheck
 
       - name: Production build
-        env:
-          SITE_URL: ${{ vars.SITE_URL || 'https://styleclubindia.com' }}
         run: npm run build
 
       - name: Built output security checks
