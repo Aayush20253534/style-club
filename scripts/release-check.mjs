@@ -9,7 +9,9 @@ const errors = [];
 const EXPECTED_TITLE = "Style Club Prayagraj | Clothing for Men, Women & Kids";
 const EXPECTED_DESCRIPTION =
   "Explore men’s, women’s and kids’ fashion at Style Club, with stores in Katra, Naini and Phaphamau in Prayagraj (Allahabad), plus Bharwari in Kaushambi. Civil Lines is coming soon.";
-const EXPECTED_ORIGIN = process.env.SITE_URL ?? process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.styleclub.fashion";
+const EXPECTED_ORIGIN = new URL(
+  process.env.SITE_URL ?? process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.styleclub.fashion",
+).origin;
 
 const EXPECTED_ROUTES = [
   "/",
@@ -217,7 +219,8 @@ function checkSource() {
     const layout = read("app/layout.tsx");
     assertIncludes(layout, EXPECTED_TITLE, "app/layout.tsx");
     assertIncludes(layout, EXPECTED_DESCRIPTION, "app/layout.tsx");
-    assertIncludes(layout, 'alternates: { canonical: "/" }', "app/layout.tsx");
+    assertIncludes(layout, "metadataBase: new URL(SITE_URL)", "app/layout.tsx");
+    assertIncludes(layout, "canonical:", "app/layout.tsx");
     assertIncludes(layout, 'index: true', "app/layout.tsx");
     assertIncludes(layout, 'follow: true', "app/layout.tsx");
     assertIncludes(layout, 'openGraph:', "app/layout.tsx");
@@ -317,8 +320,11 @@ function checkDistOutput() {
 
     assertRenderedTitle(html, "rendered homepage");
     assertIncludes(html, EXPECTED_DESCRIPTION, "rendered homepage");
-    if (!/<link[^>]+rel=["']canonical["'][^>]+href=["']https:\/\/[^"']+["']/i.test(html)) {
-      fail("Rendered homepage is missing an HTTPS canonical URL.");
+    const homeCanonical = canonicalFromHtml(html);
+    if (!homeCanonical) {
+      fail("Rendered homepage is missing a canonical URL.");
+    } else if (homeCanonical !== EXPECTED_ORIGIN) {
+      fail(`Rendered homepage canonical ${homeCanonical} does not match ${EXPECTED_ORIGIN}.`);
     }
     if (!/<meta[^>]+property=["']og:title["']/i.test(html)) fail("Rendered homepage is missing og:title.");
     if (!/<meta[^>]+property=["']og:url["']/i.test(html)) fail("Rendered homepage is missing og:url.");
