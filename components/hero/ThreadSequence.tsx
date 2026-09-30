@@ -250,26 +250,23 @@ export default function ThreadSequence() {
         if (feather) feather.style.display = "none";
         return;
       }
-      // Portrait: fit the focus crop to the width so the whole garment stays in frame.
+      // Portrait/mobile: fill the viewport with the dedicated mobile sequence.
+      // A small crop is preferable to showing the animation as a separate card.
       const { sx, sw } = src.crop;
-      let s = (cw * 1.04) / sw;
-      if (ih * s > ch * 0.86) s = (ch * 0.86) / ih;
-      const dw = sw * s;
-      const dh = ih * s;
-      rect = { sx, sw, dx: (cw - dw) / 2, dy: Math.max(ch * 0.45 - dh / 2, ch * 0.08), dw, dh };
-      // The backdrop is painted once; a static CSS layer feathers the frame edges into it.
+      const scale = Math.max(cw / sw, ch / ih);
+      const dw = sw * scale;
+      const dh = ih * scale;
+      rect = {
+        sx,
+        sw,
+        dx: (cw - dw) / 2,
+        dy: (ch - dh) / 2,
+        dw,
+        dh,
+      };
       ctx.fillStyle = `rgb(${BG})`;
       ctx.fillRect(0, 0, cw, ch);
-      if (feather) {
-        const k = canvas.clientWidth / cw;
-        Object.assign(feather.style, {
-          display: "block",
-          left: `${rect.dx * k - 1}px`,
-          top: `${rect.dy * k - 1}px`,
-          width: `${rect.dw * k + 2}px`,
-          height: `${rect.dh * k + 2}px`,
-        });
-      }
+      if (feather) feather.style.display = "none";
     };
 
     const drawFrame = (img: CanvasImageSource) => {
@@ -539,7 +536,7 @@ export default function ThreadSequence() {
                 height={720}
                 fetchPriority="high"
                 decoding="async"
-                className="absolute inset-0 size-full object-cover portrait:left-1/2 portrait:top-[45%] portrait:h-auto portrait:w-[104%] portrait:-translate-x-1/2 portrait:-translate-y-1/2"
+                className="absolute inset-0 size-full object-cover object-center"
               />
             </picture>
           </div>
@@ -566,13 +563,6 @@ export default function ThreadSequence() {
                 <span ref={stageNumRef}>01</span> / 08 — <span ref={stageLabelRef}>Thread</span>
               </span>
             </p>
-            <button
-              type="button"
-              onClick={skip}
-              className="eyebrow link-draw pb-1 text-white/70 transition-colors hover:text-white motion-reduce:hidden"
-            >
-              Skip the film
-            </button>
           </div>
 
           {/* Copy */}
